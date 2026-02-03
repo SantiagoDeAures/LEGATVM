@@ -1,195 +1,194 @@
-# DISEÑO DE LEGATVM
+# LEGATVM DESIGN
 
-## Requisitos Funcionales
+## Functional Requirements
 
-- Una interfaz con todos los volúmenes creados antes de logerse.
+- An interface displaying all created volumes before logging in.
 
-- La interfaz debe tener un header con el botón de iniciar sección, registrarse y un navbar con la opción de ir a acerca de.
+- The interface must have a header with buttons for logging in and registering, and a navbar with an "About" option.
 
-- Una página de presentación, explicando su actividad principal y sus contactos.
+- A presentation page explaining its main activity and contact information.
 
-- La interfaz debe tener barra de busqueda y filtros por categorías.
+- The interface must have a search bar and category filters.
 
-- La interfaz debe tener un banner con un GIF con una escena cinematografica (En un futuro será utilizado para las novedades)
+- The interface must have a banner with a GIF of a cinematic scene (this will be used for news in the future).
 
-- Si el usuario trata de acceder a uno de los volmenes se abrirá el modal para logearse.
+- If the user tries to access one of the volumes, they will be redirected to the login page.
 
-- El modal para logearse debe tener input de correo electronico y contraseña.
+- The login page must have email and password fields.
 
-- El modal debe ofrecer opción para autenticarse con Google.
+- The page must offer a "Forgot Password" option.
 
-- El modal debe ofrecer opción de registrarse y de olvide contraseña.
+- The registration page must contain a form with the following fields:
 
-- La página de registro debe contener un formulario con los siguientes campos:
+* Email address
 
-    * Correo electronico
-    * Nombre de uuario
-    * Contraseña
-    * Confirmar contraseña
+* Username
 
-- Cada uno de estos campos debe validarse, el nombre usuario y el correo no deben estar en la base de datos y las contraseñas deben coincidir.
+* Password
 
-- Al enviar el formulario de registro se debe enviar un correo de confirmación al correo electronico ingresado para que la cuenta pueda activarse.
+* Confirm password
 
-- En la página de recuperar contraseña debe haber un label inidicando que se ingrese el correo de la cuenta de la cual se desea recuperar la contraseña y su respectivo Input y botón de envio.
+- Each of these fields must be validated. The username and email address must not be in the database, and the passwords must match.
 
-- El input debe validar que el correo exista en la base de datos.
+- Upon submitting the registration form, a confirmation email must be sent to the entered email address so that the account can be activated.
 
-- Al confirmarse el correo, se enviará un mensaje de recuperación de contraseña y este correo le redigirá a una página para ingresar la nueva contraseña y la confirmación de esta.
+- The password recovery page must include a label indicating that the email address of the account for which the password is to be recovered must be entered, along with its corresponding input field and submit button.
 
-- Se enviará un correo indicando que el cambio de contraseña fue exitoso.
+- The input field must validate that the email address exists in the database.
 
-- Cuando el usuario este logeado el header cambiara un poco, ahora tendrá un navbar con perfil, pricing y acerca de.
+- Upon confirmation of the email address, a password recovery message will be sent, and this email will redirect the user to a page to enter and confirm the new password.
 
-- El header también tendrá un botón de ir a mis volúmenes, cantidad de monedas disponibles y botón de cerrar sección.
+- When the user is logged in, the header will change slightly, now displaying a navbar with profile, coin balance, and "About" information.
 
-- Al darle click a uno de los volúmenes se mostrará una vista previa en un modal, explicando el contenido, si no es un volumen gratuito mostrará el precio en cantidad de monedas y un botón con la opción de iniciar, si no es la primera vez que se accede al volumen ya no mostrará el costo, el botón dará la opción de continuar y la barra de progreso.
+- The header will also have the option to display a modal with a button to go to "My Volumes," "My Profile," and a "Log Out" button.
 
-- Al avanzar con un volumen se guardará el progreso, y se retomará con la cinematica siguiente a la última ronda de preguntas respondidas.
+- Clicking on a volume will display a preview in a modal, explaining the content. If it's not a free volume, it will show the price in coins and a button to start. If it's not the first time accessing the volume, the price will no longer be displayed, and the button will offer the option to continue.
 
-- En los desafios que incluyan cuestionarios, para algunas preguntas puntuales habrá un reloj de cuenta regresiva, enseñando el tiempo restante para responder la pregunta.
+- Progress through a volume will be saved, and the cinematic will resume after the last round of questions answered.
 
-- Cuando un usuario no pasa la prueba tendrá las opciones de volver a ver el volumen o de reintentar la prueba
+- If a user fails the test, they will have the option to revisit the volume or retake the test.
 
-- La página del perfil tendrá la información del contacto, y la opción de editar ciertos datos.
+- The profile page will contain contact information.
 
-- La página de pricing ofrecerá diferentes promociones para adquirir monedas para acceder a los volúmenes.
+## Non-Functional Requirements
 
+- Passwords must be encrypted.
 
-## Requisitos No Funcionales
+- Communication between the client and server must be exclusively via HTTPS.
 
-- Las contraseñas deben cifrarse.
+- The system should only allow 5 login attempts per minute per IP address.
 
-- La comunicación entre cliente y servidor debe realizarse exclusivamente mediante HTTPS.
+- The system should allow adding new modules without affecting existing functionality.
 
-- El sistema solo debe permitir 5 intentos de login por minuto por IP
+- The code must follow best practice standards and be properly documented.
 
-- El sistema debe permitir agregar nuevos módulos sin afectar el funcionamiento existente.
+- The system should not store payment information.
 
-- El código debe seguir estándares de buenas prácticas y estar debidamente documentado.
+## Use Cases
 
-- El sistema no debe almacenar información de medios de pago.
+- As a customer, I want to register to create an account in the system.
 
-## Casos de Uso
+- As a customer, I want to log in to access my modules of interest.
 
-- Como usuario cliente quiero registrarme para obtener mi cuenta en el sistema.
+- As a customer, I want to access the "Forgot your password?" option to recover my account.
 
-- Como usuario cliente quiero logearme para acceder a mis módulos de interés.
+- As a customer, I want to pay for a subscription volume to gain access to it.
 
-- Cómo usuario cliente quiero acceder a "olvide mi contraseña" para recuperar mi cuenta.
+- As a customer, I want to access a subscription volume to begin consuming the content.
 
-- Como usuario cliente quiero acceder a la sección de pricing para recargar mi cartera y adquirir más volúmenes.
+- As a customer, I want to pause a subscription volume to continue later without losing my progress.
 
+- As a customer, I want to resume a subscription volume to continue from where I left off.
 
-## Reglas de Negocio
+## Business Rules
 
-- El usuario pasará las pruebas cuando tenga un puntaje mayor al 70% de aprobación.
+- The user will pass the tests when they achieve a score higher than 70%.
 
-- El usuario que recién se registre tendrá disponibles en su cartera 150 modenas.
+Newly registered users will have 150 coins available in their wallet.
 
-## Modelo de Datos
+## Data Model
 
-### Usuario
+### User 
 
- ```json
-{
-    "id": "string",
-    "username": "string",
-    "password": "string",
-    "email": "string"
+```json
+{ 
+"id": "string", 
+"username": "string", 
+"password": "string", 
+"email": "string"
 }
 
 ```
 
-### Volumen
+### Volume 
 
- ```json
-{
-    "id": "string",
-    "title": "string",
-    "description": "string",
-    "categories": [],
-    "price": "number",
-    "thumbnail": "string"
+```json
+{ 
+"id": "string", 
+"title": "string", 
+"description": "string", 
+"categories": [], 
+"price": "number", 
+"thumbnail": "string"
 }
 
 ```
 
-### capítulo
+### chapter 
 
- ```json
-{
-    "id": "string",
-    "volumeId": "string",
-    "title": "string",
-    "type": "string",
-    "contentUrl": "string"
+```json
+{ 
+"id": "string", 
+"volumeId": "string", 
+"title": "string", 
+"type": "string", 
+"contentUrl": "string"
 }
 
 ```
 
-### Prueba
+### Proof 
 
- ```json
-{
-    "id": "string",
-    "chapterId": "string",
-    "questions": [],
-    "timeLimit": "number"
+```json
+{ 
+"id": "string", 
+"chapterId": "string", 
+"questions": [], 
+"timeLimit": "number"
 }
 
 ```
 
-### Pregunta
+### Question
 
- ```json
+``json
 {
-    "id": "string",
-    "challengeId": "string",
-    "question": "string",
-    "options": [
-        {
-            "id": "string",
-            "text": "string"
-        }
-    ],
-    "correctAnswers": []
+"id": "string",
+"challengeId": "string",
+"question": "string",
+"options": [
+
+{
+"id": "string",
+"text": "string"
+}
+],
+"correctAnswers": []
 }
 
 ```
 
+### Volume Progress
 
-### Progreso de Volumen
-
- ```json
+``json
 {
-    "userId": "string",
-    "volumeId": "string",
-    "completedChapters": [],
-    "progress": "number",
-    "completed": "boolean"
+"userId": "string",
+"volumeId": "string",
+"completedChapters": [],
+"progress": "number",
+"completed": "boolean"
 }
 
 ```
 
-## Tecnologías a Utilizar
+## Technologies to Use
 
-Para la creación de la aplicación se hara uso de las siguientes tecnologías:
+The following technologies will be used to create the application:
 
 Frontend: TypeScript, React, React DOM
 
 Backend: NodeJS, Express, JWT, Rate Limiting
 
-Base de datos: PostgreSQL
+Database: PostgreSQL
 
-Estas tecnologías fueron seleccionados debido a que son sobre las cuales se tiene mayor dominio, pero no se descartan futuros cambios de acuerdo a las necesidades del proyecto.
+These technologies were selected because they are the ones we have the most expertise in, but future changes are possible depending on the project's needs.
 
 
 ## Endpoints API
 
-### Usuario
+### User
 
-### Registrar usuario
+### Register User
 
 **POST**  `/api/auth/register`
 
@@ -233,7 +232,7 @@ Response: ``200`
 
 ```
 
-### Autenticación de Usuario
+### User Authentication
 
 **POST** `/api/auth/login`
 
@@ -256,7 +255,7 @@ Response: `200`
 
 ```
 
-### Cerrar sesión 
+### Log Out
 
 **POST** `/api/auth/logout`
 
@@ -268,9 +267,9 @@ Cookie: refreshToken=xyz
 Authorization: Bearer <accessToken>
 
 
-### Volumen
+### Volume
 
-### Obtener Volúmenes
+### Get Volumes
 
 **GET** `/api/volumes`
 
@@ -303,7 +302,7 @@ Response: `200`
 
 ```
 
-### Obtener detalles del volumen
+### Get volume details
 
 **GET** `/api/volumes/:volumId`
 
@@ -319,7 +318,7 @@ Response: `200`
 
 ```
 
-### Capítulo
+### Chapter
 
 **GET** `/api/volumes/:volumeId/chapters`
 
@@ -335,7 +334,7 @@ Response: `200`
 
 ```
 
-### Prueba
+### Test
 
 **GET** `/api/volumes/:volumeId/:chapterId/prueba`
 
