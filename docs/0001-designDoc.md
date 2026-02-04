@@ -141,7 +141,7 @@ Newly registered users will have 150 coins available in their wallet.
 
 ### Question
 
-``json
+```json
 {
 "id": "string",
 "challengeId": "string",
@@ -160,7 +160,7 @@ Newly registered users will have 150 coins available in their wallet.
 
 ### Volume Progress
 
-``json
+```json
 {
 "userId": "string",
 "volumeId": "string",
@@ -177,7 +177,7 @@ The following technologies will be used to create the application:
 
 Frontend: TypeScript, React, React DOM
 
-Backend: NodeJS, Express, JWT, Rate Limiting
+Backend: TypeScript,NodeJS, Express, JWT, Rate Limiting
 
 Database: PostgreSQL
 

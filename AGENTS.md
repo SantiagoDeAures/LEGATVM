@@ -67,7 +67,9 @@ src/
 
 ### Technology Stack
 
-The backend of this project is built using **Node.js** and **Express.js**, adhering to the principles of **Clean Architecture**. This ensures that the codebase remains modular, testable, and scalable.
+
+
+The backend of this project is built using **TypeScript**, **Node.js** and **Express.js**, adhering to the principles of **Clean Architecture**. This ensures that the codebase remains modular, testable, and scalable.
 
 ### Core Principles
 
