@@ -1,0 +1,27 @@
+@use '../shared/styles/variables' as v;
+
+.home-container {
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.home-banner {
+    max-width: 100vw;
+    height: 100vh;
+    position: relative;
+    background-image: url("../assets/videoBackground-home.png");
+    background-size: cover;
+}
+
+.banner-button{
+    position: absolute;
+    bottom: 0; 
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: v.$color-primary;
+    color: v.$color-font-highlight;
+    border: 2px solid v.$color-font-highlight
+
+}
