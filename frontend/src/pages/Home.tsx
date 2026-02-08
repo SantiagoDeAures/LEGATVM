@@ -1,10 +1,12 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import VolumeList from "../shared/components/VolumeList"
 import type { Volume } from "../shared/types/volume";
 import './Home.scss'
 
 export const Home = () => {
   const videoListRef = useRef<HTMLDivElement>(null);
+    const homeContainerRef = useRef<HTMLDivElement>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleScroll = () => {
     if (videoListRef.current) {
@@ -12,36 +14,60 @@ export const Home = () => {
     }
   };
 
+  const handleCategoryList = () => {
+    setShowFilters((s) => !s)
+  }
+
+useEffect(() => {
+  const container = homeContainerRef.current;
+  if (!container) return;
+
+  const hideCategoryList = () => {
+    setShowFilters(false);
+  };
+
+  container.addEventListener('scroll', hideCategoryList);
+
+  return () => {
+    container.removeEventListener('scroll', hideCategoryList);
+  };
+}, []);
+
+
   const volumeList: Volume[] = [
     {
       id: '1',
-      title: 'Volume One',
+      title: 'The Prince',
       description: 'Description One',
       categories: ['Historia', 'Ciencia'],
       price: 10,
-      thumbnail: 'image1.jpg',
+      thumbnail: '../src/assets/ThePrince.png',
     },
     {
       id: '2',
-      title: 'Volume Two',
+      title: 'The IA Story',
       description: 'Description Two',
       categories: ['Filosofía'],
       price: 20,
-      thumbnail: 'image2.jpg',
+      thumbnail: '../src/assets/TheIAStory.png',
     },
     {
       id: '3',
-      title: 'Volume Three',
+      title: 'The Republic',
       description: 'Description Three',
       categories: ['Arte', 'Tecnología'],
       price: 30,
-      thumbnail: 'image3.jpg',
+      thumbnail: '../src/assets/TheRepublic.png',
     },
   ];
 
   return (
-    <div className='home-container'>
+    <div className='home-container' ref={homeContainerRef}>
       <div className='home-banner' >
+
+        <video autoPlay muted loop className="background-video">
+          <source src='../src/assets/banner-LEGATVM12.mp4' type='video/mp4' />
+        </video>
 
         <button
         className='banner-button'
@@ -49,11 +75,16 @@ export const Home = () => {
         >
           Empieza a explorar
         </button>
+
+        <div className='phrase-container'>
+          <p>"En algún sitio algo increíble espera ser descubierto."</p>
+          <p>- Carl Sagan</p>
+        </div>
       </div>
 
       
       <div className="video-list-section" data-testid="video-list-section" ref={videoListRef}>
-        <VolumeList volumes={volumeList}/>
+        <VolumeList volumes={volumeList} handleCategoryList={handleCategoryList} showFilters ={showFilters}/>
       </div>
     </div>
   );

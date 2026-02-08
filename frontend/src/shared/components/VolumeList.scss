@@ -1,25 +1,59 @@
+@use '../../shared/styles/variables' as v;
+
 .volume-list {
   max-width: 100vw;
   width: 100%;
   box-sizing: border-box;
-  // ...existing code...
 }
 .volume-list-container {
   width: 100vw;
   min-height: 100vh;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: brown;
-  overflow-x: hidden; 
+  background-color: v.$color-secondary;
+  overflow-x: hidden;
 }
 
-.category-list {
+.volume-list-elements{
+  width: 100%;
+  padding-top: 12.5rem;
+   display: flex;
+     flex-direction: column;
+    align-items: center;
+}
+
+.filters-container {
+  display: flex;
+  gap: .625rem;
+  height: 2.5rem;
+  margin-bottom: .9375rem;
+}
+
+.volume-search{
+  border: solid .0625rem black;
+  border-radius: 1.25rem;
+  font-family: v.$font-secondary;
+  padding-left: .625rem;
+}
+
+.filter-button{
+  font-family: v.$font-primary;
+  background-color: v.$color-primary;
+  color: v.$color-font-highlight;
+}
+
+.category-list { 
+  padding: .8125rem;
+  position: absolute;
+  top: 230px;
+  left: 53%;
   display: flex;
   flex-direction: column;
   margin: 1rem 0;
-  overflow-x: hidden; 
+  background-color: v.$color-primary;
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  color: v.$color-font-light;
+  font-family: v.$font-secondary;
 }
 
 .volume-cards {
@@ -27,7 +61,8 @@
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
-  overflow-x: hidden; 
+  height: 100vh;
+  overflow-x: hidden;
 }
 
 .volume-card {
@@ -35,16 +70,24 @@
   flex-direction: column;
   align-items: center;
   margin: 1rem;
-  padding: 1rem;
+  height: 13.4375rem;
   border: 1px solid #eee;
   border-radius: 8px;
-  background: #fafafa;
-  overflow-x: hidden; 
+  background-color: v.$color-primary;
+  font-family: v.$font-secondary;
+  color: v.$color-font-light;
+  overflow-x: hidden;
+    div{
+      margin-top: .9375rem;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      font-size: 1rem;
+    }
 }
 
 .volume-card img {
-  width: 120px;
-  height: 120px;
+  width: 12.5rem;
   object-fit: cover;
   border-radius: 4px;
   margin-bottom: 0.5rem;

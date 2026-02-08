@@ -3,7 +3,9 @@ import type { Volume } from '../types/volume';
 import './VolumeList.scss';
 
 interface VolumeListProps {
-  volumes: Volume[];
+  volumes: Volume[],
+  showFilters?: boolean,
+  handleCategoryList?: () => void
 }
 
 const CATEGORY_LIST = [
@@ -15,8 +17,11 @@ const CATEGORY_LIST = [
   'Tecnología',
 ];
 
-export default function VolumeList({ volumes }: VolumeListProps) {
-  const [showFilters, setShowFilters] = useState(false);
+export default function VolumeList({
+   volumes, 
+   showFilters, 
+   handleCategoryList
+  }: VolumeListProps) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['Todos']);
   const [search, setSearch] = useState('');
 
@@ -43,36 +48,44 @@ export default function VolumeList({ volumes }: VolumeListProps) {
     return matchesCategory && matchesSearch;
   });
 
+
   return (
     <div className="volume-list-container">
-      <input
-        placeholder="Buscar volumen"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <button onClick={() => setShowFilters((s) => !s)}>Filtrar</button>
-      {showFilters && (
-        <div className="category-list">
-          {CATEGORY_LIST.map((cat) => (
-            <label key={cat}>
-              <input
-                type="checkbox"
-                aria-label={cat}
-                checked={selectedCategories.includes(cat)}
-                onChange={() => handleCategoryChange(cat)}
-              />
-              {cat}
-            </label>
+      <div className="volume-list-elements" >
+
+        <div className='filters-container'>
+          <input
+            className='volume-search'
+            placeholder="Buscar volumen"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button className='filter-button' onClick={handleCategoryList}>Filtrar</button>
+          {showFilters && (
+            <div className='category-list'>
+              {CATEGORY_LIST.map((cat) => (
+                <label key={cat}>
+                  <input
+                    type="checkbox"
+                    aria-label={cat}
+                    checked={selectedCategories.includes(cat)}
+                    onChange={() => handleCategoryChange(cat)}
+                  />
+                  {cat}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="volume-cards">
+          {filtered.map((volume) => (
+            <div key={volume.id} className="volume-card">
+              <img src={volume.thumbnail} alt={volume.title} />
+              <div>{volume.title}</div>
+            </div>
           ))}
         </div>
-      )}
-      <div className="volume-cards">
-        {filtered.map((volume) => (
-          <div key={volume.id} className="volume-card">
-            <img src={volume.thumbnail} alt={volume.title} />
-            <div>{volume.title}</div>
-          </div>
-        ))}
       </div>
     </div>
   );
