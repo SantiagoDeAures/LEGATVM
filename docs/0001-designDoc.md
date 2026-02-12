@@ -158,6 +158,7 @@ Newly registered users will have 150 coins available in their wallet.
 
 ```
 
+
 ### Volume Progress
 
 ```json
@@ -167,6 +168,17 @@ Newly registered users will have 150 coins available in their wallet.
 "completedChapters": [],
 "progress": "number",
 "completed": "boolean"
+}
+
+```
+
+### Wallet
+
+```json
+{
+"id": "string",
+"userId": "string",
+"balance": "number"
 }
 
 ```
@@ -248,12 +260,6 @@ Request:
 
 Response: `200`
  
- ```json
-{
-    "accesToken": "abc123xyz"
-}
-
-```
 
 ### Log Out
 
@@ -261,10 +267,16 @@ Response: `200`
 
 Response: `204`
 
-Headers:
+Cookie: refreshToken=xyz
+
+
+### Refresh Token
+
+**POST** `/api/auth/refresh`
+
+Response: `200`
 
 Cookie: refreshToken=xyz
-Authorization: Bearer <accessToken>
 
 
 ### Volume
@@ -302,6 +314,31 @@ Response: `200`
 
 ```
 
+### Get My Volumes
+
+**GET** `/api/users/volumes`
+
+Response: `200`
+ 
+ ```json
+{
+    {
+  "data": [
+    {
+      "id": "01",
+      "title": "Historia de la IA",
+      "thumbnail": "url"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "totalPages": 3
+  }
+}
+
+}
+
+```
 ### Get volume details
 
 **GET** `/api/volumes/:volumId`

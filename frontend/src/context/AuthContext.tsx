@@ -1,12 +1,12 @@
 import { createContext, useState, useEffect} from 'react';
 import type { ReactNode } from 'react';
 import type { AuthContextType } from '../shared/types/AuthContextType';
-import type { User } from '../shared/types/user';
+import type { AuthUser } from '../shared/types/AuthUser';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const isAuthenticated = !!user
 
   useEffect(() => {

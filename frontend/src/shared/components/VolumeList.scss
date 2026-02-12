@@ -5,6 +5,7 @@
   width: 100%;
   box-sizing: border-box;
 }
+
 .volume-list-container {
   width: 100vw;
   min-height: 100vh;
@@ -13,12 +14,12 @@
   overflow-x: hidden;
 }
 
-.volume-list-elements{
+.volume-list-elements {
   width: 100%;
   padding-top: 12.5rem;
-   display: flex;
-     flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .filters-container {
@@ -28,20 +29,27 @@
   margin-bottom: .9375rem;
 }
 
-.volume-search{
+.volume-search {
   border: solid .0625rem black;
   border-radius: 1.25rem;
   font-family: v.$font-secondary;
   padding-left: .625rem;
 }
 
-.filter-button{
+.filter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: v.$font-primary;
   background-color: v.$color-primary;
   color: v.$color-font-highlight;
+  font-size: .9375rem;
+  border: 1px solid;
+  border-radius: .625rem;
+  padding: .9375rem;
 }
 
-.category-list { 
+.category-list {
   padding: .8125rem;
   position: absolute;
   top: 230px;
@@ -51,7 +59,7 @@
   margin: 1rem 0;
   background-color: v.$color-primary;
   border-radius: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   color: v.$color-font-light;
   font-family: v.$font-secondary;
 }
@@ -77,13 +85,14 @@
   font-family: v.$font-secondary;
   color: v.$color-font-light;
   overflow-x: hidden;
-    div{
-      margin-top: .9375rem;
-      display: flex;
-      justify-items: center;
-      align-items: center;
-      font-size: 1rem;
-    }
+
+  div {
+    margin-top: .9375rem;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    font-size: 1rem;
+  }
 }
 
 .volume-card img {

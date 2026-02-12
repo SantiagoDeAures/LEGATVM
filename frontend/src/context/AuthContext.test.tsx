@@ -5,7 +5,7 @@ import { useContext, useEffect } from 'react';
 import type { AuthContextType } from '../shared/types/AuthContextType'
 import { AuthProvider, AuthContext } from './AuthContext';
 
-const mockUser = { id: '1', username: 'test', email: 'test@example.com', password: 'MysecurePassword' };
+const mockUser = { id: '1', username: 'test', email: 'test@example.com'};
 
 beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn());
@@ -26,7 +26,6 @@ describe('AuthContext', () => {
         function TestComponent() {
             const auth = useContext(AuthContext);
 
-            // Usamos useEffect para asignar el valor de forma segura
             useEffect(() => {
                 contextValue = auth;
             }, [auth]);

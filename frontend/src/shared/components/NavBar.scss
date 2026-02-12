@@ -1,0 +1,90 @@
+@use '../../shared/styles/variables' as v;
+
+.nav-container {
+    background-color: v.$color-primary;
+    width: 100vw;
+    height: 6.25rem;
+    position: absolute;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.image-logo-container {
+    margin-left: -1.875rem;
+}
+
+.image-logo {
+    width: 20rem;
+}
+
+.menu-container {
+    margin-right: 6.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: v.$color-font-highlight;
+    font-family: v.$font-primary;
+
+}
+
+.coin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coin-icon {
+    width: 2.5rem;
+    z-index: 10;
+}
+
+.balance-input {
+    width: 4.0625rem;
+    height: 1.625rem;
+    background-color: v.$color-secondary;
+    border: 0;
+    border-radius: .625rem;
+    text-align: center;
+    font-family: v.$font-primary;
+}
+
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-icon {
+    width: 4.375rem;
+
+}
+
+.profile-options {
+    background-color: v.$color-primary;
+    position: absolute;
+    top: 5.625rem;
+    border-radius: .9375rem;
+    padding: 1.5625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: .9375rem;
+    border: 1px solid #000000
+
+}
+
+    .profile-option-item{
+        text-decoration: none;
+        color: v.$color-font-light;
+        font-family: v.$font-primary;
+    }

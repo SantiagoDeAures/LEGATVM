@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import VolumeList from "../shared/components/VolumeList"
 import type { Volume } from "../shared/types/volume";
 import './Home.scss'
+import NavBar from '../shared/components/NavBar';
 
 export const Home = () => {
   const videoListRef = useRef<HTMLDivElement>(null);
@@ -63,6 +64,8 @@ useEffect(() => {
 
   return (
     <div className='home-container' ref={homeContainerRef}>
+      <NavBar />
+
       <div className='home-banner' >
 
         <video autoPlay muted loop className="background-video">

@@ -5,6 +5,8 @@
     height: 100vh;
     overflow-x: hidden;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 .home-banner {
@@ -19,13 +21,13 @@
     padding: .9375rem;
     width: 18.75rem;
     position: absolute;
+    top: 7.5rem;
     right: 0;
     font-family: v.$font-secondary;
 }
 
 .background-video{
     position: fixed;
-    left: 500;
     top: 0;
     min-width: 100%;
     min-height: 100%;
@@ -40,7 +42,10 @@
     transform: translateX(-50%);
     background-color: v.$color-primary;
     font-family: v.$font-primary;
+    font-size: .9375rem;
     color: v.$color-font-highlight;
-    border: 2px solid v.$color-font-highlight
+    border: 2px solid v.$color-font-highlight;
+    border-radius: .625rem;
+    padding: .9375rem;
 
 }
