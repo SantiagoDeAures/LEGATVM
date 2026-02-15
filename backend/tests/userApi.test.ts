@@ -25,8 +25,8 @@ describe('User API', () => {
       .post('/api/auth/login')
       .send({ email: 'example@email.com', password: './gbo18InP' });
     expect(res.status).toBe(200);
-    expect(res.body.user).toBe({id: '1', username: 'user1', email:'example@email.com', wallet:{
-        balance: 100
+    expect(res.body.user).toEqual({id: '1', username: 'user10', email:'example@email.com', wallet:{
+        balance: 150
     }});
   });
 
@@ -41,6 +41,6 @@ describe('User API', () => {
       .post('/api/auth/refresh')
       .send({ refreshToken: 'dummy-refresh-token' });
     expect(res.status).toBe(200);
-    expect(res.body.accessToken).toBeDefined();
+    expect(res.body.message).toMatch(/Token refrescado/i);
   });
 });

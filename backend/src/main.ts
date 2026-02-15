@@ -1,26 +1,25 @@
 import express from 'express';
-import { User } from './shared/types/user';
+import { InMemoryUserRepository } from './infrastructure/persistence/InMemoryUserRepository';
+import { RegisterUser } from './application/use-cases/RegisterUser';
+import { LoginUser } from './application/use-cases/LoginUser';
+import { createAuthRouter } from './infrastructure/http/routes/authRoutes';
+import { InMemoryWalletRepository } from './infrastructure/persistence/InMemoryWalletRepository';
 
 export const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const users: Array<User> = [];
+// Persistence
+const userRepository = new InMemoryUserRepository();
+const walletRepository = new InMemoryWalletRepository();
 
-app.post('/api/auth/register', (req, res) => {
-  const { email, username, password } = req.body;
-  if (!email || !username || !password) {
-    return res.status(400).json({ message: 'Faltan campos requeridos' });
-  }
-  // Check if user already exists
-  if (users.some(u => u.email === email || u.username === username)) {
-    return res.status(409).json({ message: 'Usuario o email ya existe' });
-  }
-  let id = String(users.length + 1)
-  users.push({ id, email, username, password });
-  return res.status(201).json({ message: 'Registro exitoso. Revisa tu correo para activar tu cuenta' });
-});
+// Use Cases
+const registerUser = new RegisterUser(userRepository, walletRepository);
+const loginUser = new LoginUser(userRepository, walletRepository);
+
+// Transport
+app.use('/api/auth', createAuthRouter(registerUser, loginUser));
 
 app.get('/', (req, res) => {
   res.send('Hello world');
