@@ -6,7 +6,7 @@ export class InMemoryWalletRepository implements WalletRepository{
 
     async getWalletByUserId(userId: string): Promise < Wallet | number >{
         const wallet = this.wallets.find(w => w.userId === userId)
-        return wallet ? wallet : 0 
+        return wallet ? wallet.balance : 0 
     }
 
     async update(userId: string, wallet: Wallet): Promise<void>{

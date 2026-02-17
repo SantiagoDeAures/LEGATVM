@@ -9,6 +9,7 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   findByUsername(username: string): User | undefined {
+    console.log(this.users)
     return this.users.find(u => u.username === username);
   }
 
