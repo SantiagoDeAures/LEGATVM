@@ -13,6 +13,13 @@ import { Wallet } from './domain/Wallet';
 import { LogoutUser } from './application/use-cases/LogoutUser';
 import { RotateToken } from './application/use-cases/RotateToken';
 import { createAuthMiddleware } from './infrastructure/http/middleware/authMiddleware';
+import { InMemoryVolumeRepository } from './infrastructure/persistence/InMemoryVolumeRepository';
+import { Volume } from './domain/Volume';
+import { GetVolumes } from './application/use-cases/GetVolumes';
+import { createVolumeRouter } from './infrastructure/http/routes/volumeRoutes';
+import { InMemoryUserVolumeRepository } from './infrastructure/persistence/InMemoryUserVolumeRepository';
+import { GetUserVolumes } from './application/use-cases/GetUserVolumes';
+import { createUserRouter } from './infrastructure/http/routes/userRoutes';
 
 export const app = express();
 const port = process.env.PORT || 3000;
@@ -31,6 +38,8 @@ const userRepository = new InMemoryUserRepository();
 const walletRepository = new InMemoryWalletRepository();
 const authRepository = new InMemoryAuthRepository();
 const authProvider = new JwtTokenProvider()
+const volumeRepository = new InMemoryVolumeRepository();
+const userVolumeRepository = new InMemoryUserVolumeRepository();
 
 // Auth Middleware
 app.use(createAuthMiddleware(authProvider));
@@ -48,6 +57,13 @@ await authRepository.saveRefreshToken({
 userRepository.save(user1)
 walletRepository.save(wallet1)
 
+// Volumes de prueba
+volumeRepository.save(new Volume('01', 'Historia de la IA', 'La IA desde sus orígenes', ['historia', 'tecnología'], 0, 'https://example.com/ia.jpg'));
+volumeRepository.save(new Volume('02', 'Filosofía Griega', 'Desde Tales hasta Aristóteles', ['filosofía', 'historia'], 100, 'https://example.com/filosofia.jpg'));
+
+// Ana owns volume 01
+userVolumeRepository.save('user-uuid-1', '01');
+
 //**************************************************************************************************************** */
 
 // Use Cases
@@ -55,10 +71,14 @@ const registerUser = new RegisterUser(userRepository, walletRepository);
 const loginUser = new LoginUser(userRepository, walletRepository, authRepository, authProvider);
 const logoutUser = new LogoutUser(authRepository)
 const rotateToken = new RotateToken(authProvider)
+const getVolumes = new GetVolumes(volumeRepository);
+const getUserVolumes = new GetUserVolumes(userVolumeRepository, volumeRepository);
 
 
 // Transport
 app.use('/api/auth', createAuthRouter(registerUser, loginUser, logoutUser, rotateToken));
+app.use('/api/volumes', createVolumeRouter(getVolumes));
+app.use('/api/users', createUserRouter(getUserVolumes));
 
 app.get('/', (req, res) => {
   res.send('Hello world');

@@ -288,9 +288,6 @@ Cookie: refreshToken=xyz
 Query params (opcinal)
 
 ?category=javascript
-&level=beginner
-&page=1
-&limit=10
 
 Response: `200`
  
@@ -303,11 +300,7 @@ Response: `200`
       "title": "Historia de la IA",
       "thumbnail": "url"
     }
-  ],
-  "pagination": {
-    "page": 1,
-    "totalPages": 3
-  }
+  ]
 }
 
 }
@@ -329,11 +322,7 @@ Response: `200`
       "title": "Historia de la IA",
       "thumbnail": "url"
     }
-  ],
-  "pagination": {
-    "page": 1,
-    "totalPages": 3
-  }
+  ]
 }
 
 }

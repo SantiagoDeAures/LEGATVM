@@ -6,6 +6,7 @@ const PUBLIC_PATHS = [
   '/api/auth/login',
   '/api/auth/logout',
   '/api/auth/refresh',
+  '/api/volumes'
 ];
 
 export function createAuthMiddleware(tokenProvider: TokenProvider) {
