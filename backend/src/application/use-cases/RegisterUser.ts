@@ -33,12 +33,12 @@ export class RegisterUser {
 
     const id = String(uuidv4())
 
-    const newUser = await User.create(id, email, username, password)
+    const newUser = await User.create(id, username, email, password)
     const newWallet = Wallet.createNew(newUser.id)
 
     this.userRepository.save(newUser);
     this.walletRepository.save(newWallet)
 
-    return { status: 201, body: { message: 'Registro exitoso. Revisa tu correo para activar tu cuenta' } };
+    return { status: 201, body: { message: 'Registro exitoso. Ahora puedes acceder a tu cuenta' } };
   }
 }

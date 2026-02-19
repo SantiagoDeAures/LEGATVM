@@ -76,17 +76,17 @@ userRepository.save(user1)
 walletRepository.save(wallet1)
 
 // Volumes de prueba
-volumeRepository.save(new Volume('01', 'Historia de la IA', 'La IA desde sus orígenes', ['historia', 'tecnología'], 0, 'https://example.com/ia.jpg'));
-volumeRepository.save(new Volume('02', 'Filosofía Griega', 'Desde Tales hasta Aristóteles', ['filosofía', 'historia'], 100, 'https://example.com/filosofia.jpg'));
+volumeRepository.save(new Volume('01', 'Historia de la IA', 'La IA desde sus orígenes', ['Historia', 'tecnología'], 0, 'https://res.cloudinary.com/dzbllqpfj/image/upload/v1771513999/TheIAStory_uwpe9v.png'));
+volumeRepository.save(new Volume('02', 'Filosofía Griega', 'Desde Tales hasta Aristóteles', ['filosofía'], 100, 'https://example.com/filosofia.jpg'));
 
 // Ana owns volume 01
 userVolumeRepository.save('user-uuid-1', '01');
 
 // Chapters for volume 01 (pure content, no progress state)
-chapterRepository.save(new Chapter('ch-01', '01', 'Orígenes de la IA', 'lectura', 'https://example.com/ch01.html'));
-chapterRepository.save(new Chapter('ch-02', '01', 'El test de Turing', 'lectura', 'https://example.com/ch02.html'));
-chapterRepository.save(new Chapter('ch-03', '01', 'Redes neuronales', 'video', 'https://example.com/ch03.mp4'));
-chapterRepository.save(new Chapter('ch-04', '01', 'Aprendizaje profundo', 'lectura', 'https://example.com/ch04.html'));
+chapterRepository.save(new Chapter('ch-01', '01', 'Orígenes de la IA', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771514149/IAstory-Chapter1_bwtkxj.mp4'));
+chapterRepository.save(new Chapter('ch-02', '01', 'El test de Turing', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771514156/IAStory-chaper2_iz8mfr.mp4'));
+chapterRepository.save(new Chapter('ch-03', '01', 'Redes neuronales', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771514168/IAStory-chaper3_lwdydx.mp4'));
+chapterRepository.save(new Chapter('ch-04', '01', 'Aprendizaje profundo', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771514265/IAStory-chaper4_sctpau.mp4'));
 
 // Ana's progress on volume 01 — completed first 2 chapters
 userProgressRepository.save(new UserProgress('user-uuid-1', 'ch-01', true));

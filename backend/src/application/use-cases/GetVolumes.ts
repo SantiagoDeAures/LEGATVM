@@ -12,6 +12,7 @@ export class GetVolumes {
       id: v.id,
       title: v.title,
       thumbnail: v.thumbnail,
+      categories: v.categories
     }));
 
     return { status: 200, body: { data } };
