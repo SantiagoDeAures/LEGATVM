@@ -196,208 +196,362 @@ Database: PostgreSQL
 These technologies were selected because they are the ones we have the most expertise in, but future changes are possible depending on the project's needs.
 
 
-## Endpoints API
 
-### User
+## API Endpoint Reference
 
-### Register User
+### Auth Endpoints
 
-**POST**  `/api/auth/register`
+---
 
-Request:
- 
- ```json
-{
-    "email": "example@email.com",
-    "username": "user10",
-    "password": "./gbo18InP",
-}
+#### `POST /api/auth/register`
+**Auth:** None (public)
 
+**Request body:**
+```json
+{ "email": "user@example.com", "username": "UserName", "password": "Str0ng!Pass" }
 ```
 
-Response: ``201 created`
- 
- ```json
-{
-    "message": "Registro exitoso. Revisa tu correo para activar tu cuenta"
-}
-
+**201 — Success:**
+```json
+{ "message": "Registro exitoso. Revisa tu correo para activar tu cuenta" }
 ```
 
-**POST**  `/api/auth/verify-email`
-
-Request:
-
- ```json
-{
-    "token": "abc123xyz"
-}
-
+**400 — Missing fields:**
+```json
+{ "message": "Faltan campos requeridos" }
 ```
 
-Response: ``200`
- 
- ```json
-{
-    "message": "Has activado tu cuenta, ahora puedes iniciar sección"
-}
-
+**409 — Email or username already exists:**
+```json
+{ "message": "Usuario o email ya existe" }
 ```
 
-### User Authentication
+---
 
-**POST** `/api/auth/login`
+#### `POST /api/auth/login`
+**Auth:** None (public)
 
-Request:
-
- ```json
-{
-    "email": "example@email.com",
-    "password": "./gbo18InP"
-}
-
+**Request body:**
+```json
+{ "email": "ana@test.com", "password": "123456" }
 ```
 
-Response: `200`
- 
-
-### Log Out
-
-**POST** `/api/auth/logout`
-
-Response: `204`
-
-Cookie: refreshToken=xyz
-
-
-### Refresh Token
-
-**POST** `/api/auth/refresh`
-
-Response: `200`
-
-Cookie: refreshToken=xyz
-
-
-### Volume
-
-### Get Volumes
-
-**GET** `/api/volumes`
-
-Query params (opcinal)
-
-?category=javascript
-
-Response: `200`
- 
- ```json
+**200 — Success:**
+Sets `refreshToken` httpOnly cookie. Body:
+```json
 {
-    {
+  "user": {
+    "id": "user-uuid-1",
+    "username": "Ana Developer",
+    "email": "ana@test.com",
+    "wallet": { "balance": 500 }
+  },
+  "accessToken": "eyJhbGciOiJIUzI1NiIs..."
+}
+```
+> Note: `refreshToken` is sent only via cookie, never in the response body.
+
+**400 — Missing fields:**
+```json
+{ "message": "Faltan campos requeridos" }
+```
+
+**401 — Invalid credentials:**
+```json
+{ "message": "Credenciales inválidas" }
+```
+
+---
+
+#### `POST /api/auth/logout`
+**Auth:** None (uses `refreshToken` cookie)
+
+**Request:** No body. Send the `refreshToken` cookie.
+
+**204 — Success:**
+Clears `refreshToken` cookie. Body:
+```json
+{ "message": "Sección cerrada exitosamente" }
+```
+
+**204 — Without cookie:** Also returns 204 (no-op).
+
+---
+
+#### `POST /api/auth/refresh`
+**Auth:** None (uses `refreshToken` cookie)
+
+**Request:** No body. Send the `refreshToken` cookie obtained from login.
+
+**200 — Success:**
+```json
+{ "accessToken": "eyJhbGciOiJIUzI1NiIs..." }
+```
+
+**404 — Invalid/expired token:**
+```json
+{ "message": "token invalido" }
+```
+
+---
+
+### Volume Endpoints
+
+---
+
+#### `GET /api/volumes`
+**Auth:** None (public)
+
+**Query params:** `?category=historia` (optional)
+
+**200 — All volumes:**
+```json
+{
   "data": [
-    {
-      "id": "01",
-      "title": "Historia de la IA",
-      "thumbnail": "url"
-    }
+    { "id": "01", "title": "Historia de la IA", "thumbnail": "https://example.com/ia.jpg" },
+    { "id": "02", "title": "Filosofía Griega", "thumbnail": "https://example.com/filosofia.jpg" }
   ]
 }
-
-}
-
 ```
 
-### Get My Volumes
-
-**GET** `/api/users/volumes`
-
-Response: `200`
- 
- ```json
-{
-    {
-  "data": [
-    {
-      "id": "01",
-      "title": "Historia de la IA",
-      "thumbnail": "url"
-    }
-  ]
-}
-
-}
-
-```
-### Get volume details
-
-**GET** `/api/volumes/:volumId`
-
-Response: `200`
- 
- ```json
-{
-  "id": "01",
-  "title": "Historia de la IA",
-  "description": " La IA ...",
-  "categories": ["historia", "tecnología"],
-}
-
+**200 — Filtered (no match):**
+```json
+{ "data": [] }
 ```
 
-### Chapter
+---
 
-**GET** `/api/volumes/:volumeId/chapters`
+#### `GET /api/volumes/:volumeId/continue`
+**Auth:** Bearer token required
 
-Response: `200`
- 
- ```json
+**Headers:** `Authorization: Bearer <accessToken>`
+
+**200 — Next incomplete chapter:**
+```json
 {
-  "id": "01",
-  "title": "El sueño antiguo de crear inteligencia",
+  "id": "ch-03",
+  "volumeId": "01",
+  "title": "Redes neuronales",
   "type": "video",
-  "isCompleted": "false"
+  "contentUrl": "https://example.com/ch03.mp4",
+  "isCompleted": false
 }
-
 ```
 
-### Test
+**200 — All chapters completed:**
+```json
+{ "message": "Todos los capítulos completados", "completed": true }
+```
 
-**GET** `/api/volumes/:volumeId/:chapterId/prueba`
+**404 — Volume not found:**
+```json
+{ "message": "Volumen no encontrado" }
+```
 
-Response: `200`
- 
- ```json
+**401 — Not authenticated:**
+```json
+{ "message": "Token no proporcionado" }
+```
+
+> Side effect: marks the volume as "started" for the user.
+
+---
+
+#### `GET /api/volumes/:volumeId/:chapterId/prueba`
+**Auth:** Bearer token required
+
+**Headers:** `Authorization: Bearer <accessToken>`
+
+**200 — Prueba found:**
+```json
 {
   "id": "01",
-  "timeLimit": 600,
   "questions": [
     {
       "id": "q_01",
-      "type": "multiple_choice",
-      "question": "¿Por qué el deseo de crear inteligencia artificial existe desde antes de las computadoras?",
+      "question": "¿Quién acuñó el término Inteligencia Artificial?",
       "options": [
-        { "id": "a", "text": "Porque la inteligencia se percibe como algo mágico" },
-        { "id": "b", "text": "Porque el ser humano busca comprender y replicar su propia mente" },
-        { "id": "c", "text": "Porque las máquinas siempre han sido parte de la sociedad" },
+        { "id": "a", "text": "Alan Turing" },
+        { "id": "b", "text": "John McCarthy" },
+        { "id": "c", "text": "Marvin Minsky" },
+        { "id": "d", "text": "Claude Shannon" }
       ]
     }
   ]
 }
+```
+> Note: correct answers are **not** exposed in the response.
 
+**404 — Not found:**
+```json
+{ "message": "Prueba no encontrada" }
 ```
 
-**POST** `/api/pruebas/pruebaId/submit`
+**401 — Not authenticated:**
+```json
+{ "message": "Token no proporcionado" }
+```
 
-Request:
+---
 
- ```json
+#### `POST /api/pruebas/:pruebaId/submit`
+**Auth:** Bearer token required
+
+**Headers:** `Authorization: Bearer <accessToken>`
+
+**Request body:**
+```json
 {
-    "answers": [
-        {
-            "questionId": "q_01",
-            "selectedOptions": ["b"]
-        }
-    ]
+  "answers": [
+    { "questionId": "q_01", "selectedOptions": ["b"] },
+    { "questionId": "q_02", "selectedOptions": ["b"] },
+    { "questionId": "q_03", "selectedOptions": ["b"] },
+    { "questionId": "q_04", "selectedOptions": ["b"] },
+    { "questionId": "q_05", "selectedOptions": ["b"] }
+  ]
 }
-
 ```
+
+**200 — Passed (≥70%):**
+```json
+{
+  "score": 100,
+  "passed": true,
+  "correctCount": 5,
+  "totalQuestions": 5,
+  "volumeCompleted": false
+}
+```
+
+**200 — Failed (<70%):**
+```json
+{
+  "score": 20,
+  "passed": false,
+  "correctCount": 1,
+  "totalQuestions": 5
+}
+```
+> Note: `volumeCompleted` is only present when `passed` is `true`.
+
+**400 — Missing answers:**
+```json
+{ "message": "Se requieren las respuestas" }
+```
+
+**404 — Prueba not found:**
+```json
+{ "message": "Prueba no encontrada" }
+```
+
+**401 — Not authenticated:**
+```json
+{ "message": "Token no proporcionado" }
+```
+
+---
+
+#### `POST /api/volumes/:volumeId/purchase`
+**Auth:** Bearer token required
+
+**Headers:** `Authorization: Bearer <accessToken>`
+
+**Request:** No body needed.
+
+**200 — Success:**
+```json
+{
+  "message": "Volumen comprado exitosamente",
+  "remainingBalance": 400
+}
+```
+
+**409 — Already owned:**
+```json
+{ "message": "Ya posees este volumen" }
+```
+
+**404 — Volume not found:**
+```json
+{ "message": "Volumen no encontrado" }
+```
+
+**400 — Insufficient funds:**
+```json
+{ "message": "Saldo insuficiente" }
+```
+
+**401 — Not authenticated:**
+```json
+{ "message": "Token no proporcionado" }
+```
+
+---
+
+#### `GET /api/volumes/:volumeId/started`
+**Auth:** Bearer token required
+
+**Headers:** `Authorization: Bearer <accessToken>`
+
+**200 — Started:**
+```json
+{ "started": true }
+```
+
+**200 — Not started:**
+```json
+{ "started": false }
+```
+
+**404 — Volume not found:**
+```json
+{ "message": "Volumen no encontrado" }
+```
+
+**401 — Not authenticated:**
+```json
+{ "message": "Token no proporcionado" }
+```
+
+---
+
+### User Endpoints
+
+---
+
+#### `GET /api/users/volumes`
+**Auth:** Bearer token required
+
+**Headers:** `Authorization: Bearer <accessToken>`
+
+**200 — User's owned volumes:**
+```json
+{
+  "data": [
+    { "id": "01", "title": "Historia de la IA", "thumbnail": "https://example.com/ia.jpg" }
+  ]
+}
+```
+
+**401 — Not authenticated:**
+```json
+{ "message": "Token no proporcionado" }
+```
+
+---
+
+### Summary Table
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/auth/register` | Public | Register a new user |
+| POST | `/api/auth/login` | Public | Login, get tokens |
+| POST | `/api/auth/logout` | Cookie | Revoke refresh token |
+| POST | `/api/auth/refresh` | Cookie | Get new access token |
+| GET | `/api/volumes` | Public | List all volumes (optional `?category`) |
+| GET | `/api/volumes/:volumeId/continue` | Bearer | Get next chapter + mark started |
+| GET | `/api/volumes/:volumeId/:chapterId/prueba` | Bearer | Get prueba questions |
+| POST | `/api/pruebas/:pruebaId/submit` | Bearer | Submit prueba answers |
+| POST | `/api/volumes/:volumeId/purchase` | Bearer | Purchase a volume |
+| GET | `/api/volumes/:volumeId/started` | Bearer | Check if volume was started |
+| GET | `/api/users/volumes` | Bearer | List user's owned volumes |

@@ -9,6 +9,10 @@ export class InMemoryUserVolumeRepository implements UserVolumeRepository {
       .map((e) => e.volumeId);
   }
 
+  hasVolume(userId: string, volumeId: string): boolean {
+    return this.entries.some((e) => e.userId === userId && e.volumeId === volumeId);
+  }
+
   save(userId: string, volumeId: string): void {
     this.entries.push({ userId, volumeId });
   }

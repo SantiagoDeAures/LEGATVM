@@ -30,7 +30,7 @@ export class LoginUser {
       return { status: 401, body: { message: 'Credenciales inválidas' } };
     }
 
-    const walletBalance = await this.walletRepository.getWalletByUserId(user.id)
+    const wallet = await this.walletRepository.getWalletByUserId(user.id)
 
     const accessToken = this.tokenProvider.generateAccessToken(user.id)
     const refreshToken = this.tokenProvider.generateRefreshToken(user.id)
@@ -52,7 +52,7 @@ export class LoginUser {
           id: user.id,
           username: user.username,
           email: user.email,
-          wallet: { balance: walletBalance },
+          wallet: { balance: wallet?.balance ?? 0 },
         },
         accessToken,
         refreshToken

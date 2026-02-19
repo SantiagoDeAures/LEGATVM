@@ -4,9 +4,8 @@ import { Wallet } from "../../domain/Wallet";
 export class InMemoryWalletRepository implements WalletRepository{
     private wallets: Wallet[] = []
 
-    async getWalletByUserId(userId: string): Promise < Wallet | number >{
-        const wallet = this.wallets.find(w => w.userId === userId)
-        return wallet ? wallet.balance : 0 
+    async getWalletByUserId(userId: string): Promise<Wallet | undefined>{
+        return this.wallets.find(w => w.userId === userId)
     }
 
     async update(userId: string, wallet: Wallet): Promise<void>{

@@ -10,7 +10,7 @@ export class Wallet {
     }
 
     debit(amount: number): void {
-        if(this.balance){
+        if(amount > this.balance){
             throw new Error("Saldo insuficiente")
         }
 
