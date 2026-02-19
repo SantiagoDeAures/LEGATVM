@@ -3,6 +3,7 @@ import VolumeList from "../shared/components/VolumeList"
 import type { Volume } from "../shared/types/volume";
 import './Home.scss'
 import NavBar from '../shared/components/NavBar';
+import { API_URL } from '../shared/constants/API_URL';
 
 export const Home = () => {
   const videoListRef = useRef<HTMLDivElement>(null);
@@ -19,6 +20,22 @@ export const Home = () => {
     setShowFilters((s) => !s)
   }
 
+  const [volumeList, setVolumeList] = useState<Volume[]>([]);
+
+  useEffect(() => {
+    const fetchVolumes = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/volumes`);
+        const json = await response.json();
+        setVolumeList(json.data);
+      } catch (error) {
+        console.error('Error fetching volumes:', error);
+      }
+    };
+
+    fetchVolumes();
+  }, []);
+
 useEffect(() => {
   const container = homeContainerRef.current;
   if (!container) return;
@@ -33,34 +50,6 @@ useEffect(() => {
     container.removeEventListener('scroll', hideCategoryList);
   };
 }, []);
-
-
-  const volumeList: Volume[] = [
-    {
-      id: '1',
-      title: 'The Prince',
-      description: 'Description One',
-      categories: ['Historia', 'Ciencia'],
-      price: 10,
-      thumbnail: '../src/assets/ThePrince.png',
-    },
-    {
-      id: '2',
-      title: 'The IA Story',
-      description: 'Description Two',
-      categories: ['Filosofía'],
-      price: 20,
-      thumbnail: '../src/assets/TheIAStory.png',
-    },
-    {
-      id: '3',
-      title: 'The Republic',
-      description: 'Description Three',
-      categories: ['Arte', 'Tecnología'],
-      price: 30,
-      thumbnail: '../src/assets/TheRepublic.png',
-    },
-  ];
 
   return (
     <div className='home-container' ref={homeContainerRef}>

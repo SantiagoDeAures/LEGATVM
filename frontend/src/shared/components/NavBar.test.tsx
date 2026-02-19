@@ -20,6 +20,7 @@ describe('NavBar', () => {
     mockUseAuth.mockReturnValue({
       user: null,
       isAuthenticated: false,
+      accessToken: null,
       login: vi.fn(),
       logout: vi.fn()
     });
@@ -49,6 +50,7 @@ describe('NavBar', () => {
         }
       },
       isAuthenticated: false,
+      accessToken: null,
       login: vi.fn(),
       logout: vi.fn()
     });
@@ -59,7 +61,7 @@ describe('NavBar', () => {
     );
     expect(screen.getByText('Acerca de LEGATVM')).toBeInTheDocument();
     expect(screen.getByText('testuser')).toBeInTheDocument();
-    expect(screen.getByText(/150/)).toBeInTheDocument();
+    expect(screen.getByDisplayValue('150')).toBeInTheDocument();
     // Only About LEGATVM has border-bottom
     const aboutLink = screen.getByText('Acerca de LEGATVM');
     expect(aboutLink).toHaveStyle({

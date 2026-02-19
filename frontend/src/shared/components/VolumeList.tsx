@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Volume } from '../types/volume';
 import './VolumeList.scss';
+import { useAuth } from '../../hooks/useAuth';
 
 interface VolumeListProps {
   volumes: Volume[],
@@ -24,6 +25,7 @@ export default function VolumeList({
   }: VolumeListProps) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['Todos']);
   const [search, setSearch] = useState('');
+  // const { isAuthenticated } = useAuth()
 
   const handleCategoryChange = (category: string) => {
     if (category === 'Todos') {

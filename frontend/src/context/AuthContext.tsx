@@ -2,17 +2,19 @@ import { createContext, useState, useEffect} from 'react';
 import type { ReactNode } from 'react';
 import type { AuthContextType } from '../shared/types/AuthContextType';
 import type { AuthUser } from '../shared/types/AuthUser';
+import { API_URL } from '../shared/constants/API_URL';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const isAuthenticated = !!user
 
   useEffect(() => {
       const restoreSession = async () => {
       try {
-        const res = await fetch("/api/auth/refresh", {
+        const res = await fetch(`${API_URL}/api/auth/refresh`, {
           credentials: "include"
         });
 
@@ -31,25 +33,31 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
 const login = async (email: string, password: string) => {
   try {
-    const res = await fetch('/api/auth/login', { 
+    const res = await fetch(`${API_URL}/api/auth/login`, { 
         method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({ email, password }),
      });
-    if (res && res.ok) { // Añadimos chequeo de seguridad "res &&"
-      const data = await res.json();
+
+    const data = await res.json();
+
+    if (res.ok) {
       setUser(data.user);
+      setAccessToken(data.accessToken);
+      return { success: true };
     }
-  } catch (error) {
-    console.error("Error en login:", error);
+
+    return { success: false, message: data.message };
+  } catch {
+    return { success: false, message: 'Error de conexión con el servidor' };
   }
 };
 
   const logout = async () => {
 
     try{
-        const res = await fetch('/api/auth/logout', {
+        const res = await fetch(`${API_URL}/api/auth/logout`, {
             method: 'POST',
             credentials: 'include'
         })
@@ -63,7 +71,7 @@ const login = async (email: string, password: string) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, accessToken, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

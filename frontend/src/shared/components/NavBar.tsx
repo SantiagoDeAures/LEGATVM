@@ -7,13 +7,13 @@ import profileIcon from '../../assets/profile-icon.png'
 import { useState } from 'react';
 
 export default function NavBar() {
-  // const { user } = useAuth();
-  const user = {
-    username: 'Santiago de Aures',
-    wallet: {
-      balance: 800
-    }
-  }
+  const { user, logout } = useAuth();
+  // const user = {
+  //   username: 'Santiago de Aures',
+  //   wallet: {
+  //     balance: 800
+  //   }
+  // }
   const location = useLocation();
   const isAbout = location.pathname === '/about';
   const isLogin = location.pathname === '/login';
@@ -21,43 +21,43 @@ export default function NavBar() {
 
   const [showProfileOptions, setshowProfileOptions] = useState(false)
 
-  // if (!user) {
-  //   return (
-  //     <nav className='nav-container'>
+  if (!user) {
+    return (
+      <nav className='nav-container'>
 
-  //       <figure className='image-logo-container'>
-  //         <NavLink
-  //           to="/"
-  //         >
-  //           <img src={logo} alt="Logo de LEGATVM" className='image-logo' />
-  //         </NavLink>
-  //       </figure>
-  //       <div className='menu-container'>
-  //         <NavLink
-  //           to="/about"
-  //           className='menu-item'
-  //           style={isAbout ? { borderBottom: '2px solid #FFDC50' } : undefined}
-  //         >
-  //           Acerca de LEGATVM
-  //         </NavLink>
-  //         <NavLink
-  //           to="/login"
-  //           className='menu-item'
-  //           style={isLogin ? { borderBottom: '2px solid #FFDC50' } : undefined}
-  //         >
-  //           Iniciar sesión
-  //         </NavLink>
-  //         <NavLink
-  //           to="/register"
-  //           className='menu-item'
-  //           style={isRegister ? { borderBottom: '2px solid #FFDC50' } : undefined}
-  //         >
-  //           Registrarse
-  //         </NavLink>
-  //       </div>
-  //     </nav>
-  //   );
-  // }
+        <figure className='image-logo-container'>
+          <NavLink
+            to="/"
+          >
+            <img src={logo} alt="Logo de LEGATVM" className='image-logo' />
+          </NavLink>
+        </figure>
+        <div className='menu-container'>
+          <NavLink
+            to="/about"
+            className='menu-item'
+            style={isAbout ? { borderBottom: '2px solid #FFDC50' } : undefined}
+          >
+            Acerca de LEGATVM
+          </NavLink>
+          <NavLink
+            to="/login"
+            className='menu-item'
+            style={isLogin ? { borderBottom: '2px solid #FFDC50' } : undefined}
+          >
+            Iniciar sesión
+          </NavLink>
+          <NavLink
+            to="/register"
+            className='menu-item'
+            style={isRegister ? { borderBottom: '2px solid #FFDC50' } : undefined}
+          >
+            Registrarse
+          </NavLink>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className='nav-container'>
@@ -89,7 +89,7 @@ export default function NavBar() {
             <div className='profile-options'>
               <a className='profile-option-item' href="#" >Mi perfil</a>
               <a className='profile-option-item' href="#">Mis volúmenes</a>
-              <a className='profile-option-item' href="#">Cerrar sesión</a>
+              <a className='profile-option-item' onClick={logout}>Cerrar sesión</a>
             </div>
           }
 
