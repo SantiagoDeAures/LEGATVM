@@ -19,8 +19,10 @@ export function createAuthRouter(registerUser: RegisterUser, loginUser: LoginUse
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: false,
+        sameSite: 'lax',
+        // secure: process.env.NODE_ENV === 'production',
+        // sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000
       })
 
@@ -56,7 +58,7 @@ export function createAuthRouter(registerUser: RegisterUser, loginUser: LoginUse
     try {
       const { refreshToken } = req.cookies
       const result = await rotateToken.execute(refreshToken)
-      return res.status(200).json({ accessToken: result })
+      return res.status(200).json({ result })
 
 
     } catch (error) {

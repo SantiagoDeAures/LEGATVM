@@ -5,14 +5,15 @@ import { MemoryRouter } from 'react-router';
 import { AuthProvider } from '../context/AuthContext';
 import { Home } from './Home'; 
 
-function renderHome() {
-  return render(
+async function renderHome() {
+  render(
     <AuthProvider>
       <MemoryRouter>
         <Home />
       </MemoryRouter>
     </AuthProvider>
   );
+  await screen.findByRole('button', { name: /empieza a explorar/i });
 }
 
 beforeEach(() => {
@@ -33,16 +34,16 @@ describe('Home', () => {
   window.HTMLElement.prototype.scrollIntoView = function () {};
 });
 
-  it('renders a button labeled "Empieza a explorar" at the bottom of the banner', () => {
+  it('renders a button labeled "Empieza a explorar" at the bottom of the banner', async () => {
 
-    renderHome();
+    await renderHome();
     const button = screen.getByRole('button', { name: /empieza a explorar/i });
     expect(button).toBeInTheDocument();
   });
 
-  it('scrolls to the VideoList section when the button is clicked', () => {
+  it('scrolls to the VideoList section when the button is clicked', async () => {
 
-    renderHome();
+    await renderHome();
     const button = screen.getByRole('button', { name: /empieza a explorar/i });
     const videoListSection = screen.getByTestId('video-list-section');
     // Simulate click

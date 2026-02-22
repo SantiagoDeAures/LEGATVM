@@ -1,0 +1,25 @@
+@use '../styles/variables' as v;
+
+.not-found-container {
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../src/assets/notFound.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-found-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: v.$color-primary;
+    font-family: v.$font-primary;
+    font-size: 1.25rem;
+    color: v.$color-font-light;
+    border-radius: 15px;
+    padding: .9375rem;
+}

@@ -12,4 +12,10 @@ export class InMemoryVolumeStartRepository implements VolumeStartRepository {
       this.entries.push({ userId, volumeId });
     }
   }
+
+  markUnstarted(userId: string, volumeId: string): void {
+    this.entries = this.entries.filter(
+      (e) => !(e.userId === userId && e.volumeId === volumeId)
+    );
+  }
 }

@@ -1,8 +1,27 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+import { type ReactNode } from 'react';
+import { MemoryRouter } from 'react-router';
 import VolumeList from './VolumeList'; 
 import { Volume } from '../types/volume';
+import { AuthContext } from '../../context/AuthContext';
+
+const mockAuthValue = {
+  user: { id: 'user-uuid-1', username: 'Ana Developer', email: 'ana@test.com',  wallet: { balance: 1000 } },
+  isAuthenticated: true,
+  accessToken: 'fake-access-token',
+  login: vi.fn(),
+  logout: vi.fn(),
+};
+
+function renderWithProviders(ui: ReactNode) {
+  return render(
+    <AuthContext.Provider value={mockAuthValue}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </AuthContext.Provider>
+  );
+}
 
 describe('VolumeList', () => {
   const mockVolumes: Volume[] = [
@@ -43,7 +62,7 @@ describe('VolumeList', () => {
 
   it('renders a list of volume cards with image and title', () => {
     
-    render(<VolumeList volumes={mockVolumes} />);
+    renderWithProviders(<VolumeList volumes={mockVolumes} />);
 
     mockVolumes.forEach((volume) => {
       expect(screen.getByText(volume.title)).toBeInTheDocument();
@@ -53,11 +72,10 @@ describe('VolumeList', () => {
 
   it('renders a filter button that shows a category list with checkboxes', () => {
   
-    render(<VolumeList volumes={mockVolumes} />);
+    renderWithProviders(<VolumeList volumes={mockVolumes} showFilters={true} handleCategoryList={() => {}} />);
 
     const filterButton = screen.getByRole('button', { name: /filtrar/i });
     expect(filterButton).toBeInTheDocument();
-    fireEvent.click(filterButton);
 
     categories.forEach((category) => {
       expect(screen.getByLabelText(category)).toBeInTheDocument();
@@ -67,10 +85,7 @@ describe('VolumeList', () => {
 
   it('filters volumes by selected categories', () => {
 
-    render(<VolumeList volumes={mockVolumes} />);
-
-    const filterButton = screen.getByRole('button', { name: /filtrar/i });
-    fireEvent.click(filterButton);
+    renderWithProviders(<VolumeList volumes={mockVolumes} showFilters={true} handleCategoryList={() => {}} />);
 
     // Select "Filosofía" category
     const filosofiaCheckbox = screen.getByLabelText('Filosofía');
@@ -104,7 +119,7 @@ describe('VolumeList', () => {
 
   it('filters volumes by search bar input', () => {
 
-    render(<VolumeList volumes={mockVolumes} />);
+    renderWithProviders(<VolumeList volumes={mockVolumes} />);
 
     const searchInput = screen.getByPlaceholderText(/buscar volumen/i);
     expect(searchInput).toBeInTheDocument();

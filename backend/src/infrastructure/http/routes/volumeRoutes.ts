@@ -38,10 +38,11 @@ export function createVolumeRouter(getVolumes: GetVolumes, getVolumeDetails: Get
     return res.status(result.status).json(result.body);
   });
 
-  // router.get('/:volumeId', (req, res) => {
-  //   const result = getVolumeDetails.execute(req.params.volumeId);
-  //   return res.status(result.status).json(result.body);
-  // });
+  router.get('/:volumeId', (req, res) => {
+    const userId = (req as any).userId as string;
+    const result = getVolumeDetails.execute(req.params.volumeId, userId);
+    return res.status(result.status).json(result.body);
+  });
 
   return router;
 }

@@ -65,32 +65,32 @@ describe('Volume API', () => {
 
   // ─── GET VOLUME DETAILS (authenticated) ────────────────────
 
-  // describe('GET /api/volumes/:volumeId', () => {
-  //   it('returns volume details when authenticated', async () => {
-  //     const res = await request(app)
-  //       .get('/api/volumes/01')
-  //       .set('Authorization', `Bearer ${accessToken}`);
-  //     expect(res.status).toBe(200);
-  //     expect(res.body).toHaveProperty('id');
-  //     expect(res.body).toHaveProperty('title');
-  //     expect(res.body).toHaveProperty('description');
-  //     expect(res.body).toHaveProperty('categories');
-  //     expect(res.body).toHaveProperty('thumbnail');
-  //     expect(Array.isArray(res.body.categories)).toBe(true);
-  //   });
+  describe('GET /api/volumes/:volumeId', () => {
+    it('returns volume details when authenticated', async () => {
+      const res = await request(app)
+        .get('/api/volumes/01')
+        .set('Authorization', `Bearer ${accessToken}`);
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('id');
+      expect(res.body).toHaveProperty('title');
+      expect(res.body).toHaveProperty('description');
+      expect(res.body).toHaveProperty('categories');
+      expect(res.body).toHaveProperty('thumbnail');
+      expect(Array.isArray(res.body.categories)).toBe(true);
+    });
 
-  //   it('returns 404 when volume does not exist', async () => {
-  //     const res = await request(app)
-  //       .get('/api/volumes/nonexistent')
-  //       .set('Authorization', `Bearer ${accessToken}`);
-  //     expect(res.status).toBe(404);
-  //   });
+    it('returns 404 when volume does not exist', async () => {
+      const res = await request(app)
+        .get('/api/volumes/nonexistent')
+        .set('Authorization', `Bearer ${accessToken}`);
+      expect(res.status).toBe(404);
+    });
 
-  //   it('returns 401 when not authenticated', async () => {
-  //     const res = await request(app).get('/api/volumes/01');
-  //     expect(res.status).toBe(401);
-  //   });
-  // });
+    it('returns 401 when not authenticated', async () => {
+      const res = await request(app).get('/api/volumes/01');
+      expect(res.status).toBe(401);
+    });
+  });
 
   // ─── CONTINUE VOLUME ────────────────────────────────────────
 
@@ -124,7 +124,7 @@ describe('Volume API', () => {
   describe('GET /api/volumes/:volumeId/:chapterId/prueba', () => {
     it('returns a proof with questions when authenticated', async () => {
       const res = await request(app)
-        .get('/api/volumes/01/01/prueba')
+        .get('/api/volumes/01/ch-01/prueba')
         .set('Authorization', `Bearer ${accessToken}`);
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('id');
@@ -147,7 +147,7 @@ describe('Volume API', () => {
     });
 
     it('returns 401 when not authenticated', async () => {
-      const res = await request(app).get('/api/volumes/01/01/prueba');
+      const res = await request(app).get('/api/volumes/01/ch-01/prueba');
       expect(res.status).toBe(401);
     });
   });

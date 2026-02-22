@@ -171,7 +171,7 @@ describe('User API', () => {
         .post('/api/auth/refresh')
         .set('Cookie', refreshCookie!);
       expect(res.status).toBe(200);
-      expect(res.body.accessToken).toBeDefined();
+      expect(res.body.result.accessToken).toBeDefined();
     });
   });
 });

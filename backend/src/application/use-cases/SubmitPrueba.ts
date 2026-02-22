@@ -1,6 +1,7 @@
 import { PruebaRepository } from '../ports/PruebaRepository';
 import { UserProgressRepository } from '../ports/UserProgressRepository';
 import { ChapterRepository } from '../ports/ChapterRepository';
+import { VolumeStartRepository } from '../ports/VolumeStartRepository';
 import { UserProgress } from '../../domain/UserProgress';
 
 interface SubmitAnswer {
@@ -15,6 +16,7 @@ export class SubmitPrueba {
     private pruebaRepository: PruebaRepository,
     private userProgressRepository: UserProgressRepository,
     private chapterRepository: ChapterRepository,
+    private volumeStartRepository: VolumeStartRepository,
   ) {}
 
   execute(
@@ -67,6 +69,12 @@ export class SubmitPrueba {
       );
       const volumeCompleted = chapters.every((ch) => completedIds.has(ch.id));
       responseBody.volumeCompleted = volumeCompleted;
+
+      if (volumeCompleted) {
+        this.volumeStartRepository.markUnstarted(userId, prueba.volumeId);
+        this.userProgressRepository.deleteByUserAndChapterIds(userId, chapterIds);
+        responseBody.message = 'Has llegado al final de esta historia y has aprendido cosas nuevas, es hora de celebrar!';
+      }
     }
 
     return { status: 200, body: responseBody };

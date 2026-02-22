@@ -555,4 +555,5 @@ Clears `refreshToken` cookie. Body:
 | POST | `/api/volumes/:volumeId/purchase` | Bearer | Purchase a volume |
 | GET | `/api/volumes/:volumeId/started` | Bearer | Check if volume was started |
 | GET | `/api/users/volumes` | Bearer | List user's owned volumes |
+| GET | `/:volumeId` | Bearer | Volume details |
 

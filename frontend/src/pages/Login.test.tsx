@@ -8,14 +8,18 @@ import { Login } from './Login';
 
 const mockUser = { id: '1', username: 'user1', email: 'test@example.com', wallet: { balance: 150 } };
 
-function renderLogin() {
-  return render(
+async function renderLogin() {
+  const result = render(
     <AuthProvider>
       <MemoryRouter>
         <Login />
       </MemoryRouter>
     </AuthProvider>
   );
+  await waitFor(() => {
+    expect(screen.getByRole('button', { name: /iniciar sesión/i })).toBeInTheDocument();
+  });
+  return result;
 }
 
 beforeEach(() => {
@@ -33,25 +37,25 @@ afterEach(() => {
 
 describe('Login', () => {
   describe('form structure', () => {
-    it('renders a field for "Correo electrónico"', () => {
-      renderLogin();
+    it('renders a field for "Correo electrónico"', async () => {
+      await renderLogin();
       expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument();
     });
 
-    it('renders a field for "Contraseña"', () => {
-      renderLogin();
+    it('renders a field for "Contraseña"', async () => {
+      await renderLogin();
       expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
     });
 
-    it('renders an "Iniciar sesión" button', () => {
-      renderLogin();
+    it('renders an "Iniciar sesión" button', async () => {
+      await renderLogin();
       expect(screen.getByRole('button', { name: /iniciar sesión/i })).toBeInTheDocument();
     });
   });
 
   describe('validation – empty fields', () => {
     it('shows an error below email when it is empty', async () => {
-      renderLogin();
+      await renderLogin();
 
       fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'password123' } });
       fireEvent.click(screen.getByRole('button', { name: /iniciar sesión/i }));
@@ -61,7 +65,7 @@ describe('Login', () => {
     });
 
     it('shows an error below password when it is empty', async () => {
-      renderLogin();
+      await renderLogin();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.click(screen.getByRole('button', { name: /iniciar sesión/i }));
@@ -71,7 +75,7 @@ describe('Login', () => {
     });
 
     it('shows error messages for both fields when both are empty', async () => {
-      renderLogin();
+      await renderLogin();
       fireEvent.click(screen.getByRole('button', { name: /iniciar sesión/i }));
 
       const errorMessages = await screen.findAllByText(/este campo es obligatorio/i);
@@ -79,7 +83,7 @@ describe('Login', () => {
     });
 
     it('displays error messages in red', async () => {
-      renderLogin();
+      await renderLogin();
       fireEvent.click(screen.getByRole('button', { name: /iniciar sesión/i }));
 
       const errorMessages = await screen.findAllByText(/este campo es obligatorio/i);
@@ -89,8 +93,8 @@ describe('Login', () => {
       });
     });
 
-    it('does not call the login API when validation fails', () => {
-      renderLogin();
+    it('does not call the login API when validation fails', async () => {
+      await renderLogin();
       fireEvent.click(screen.getByRole('button', { name: /iniciar sesión/i }));
 
       // Only the AuthProvider /api/auth/refresh call should have been made
@@ -107,6 +111,10 @@ describe('Login', () => {
       });
 
       renderLogin();
+
+      await waitFor(() => {
+        expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument();
+      });
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'wrong@example.com' } });
       fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'wrongpassword1' } });
@@ -145,6 +153,10 @@ describe('Login', () => {
         </AuthProvider>
       );
 
+      await waitFor(() => {
+        expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument();
+      });
+
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'password123' } });
 
@@ -162,7 +174,7 @@ describe('Login', () => {
         json: async () => ({ user: mockUser, accessToken: 'fake-token' }),
       });
 
-      renderLogin();
+      await renderLogin();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'password123' } });

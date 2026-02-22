@@ -13,4 +13,10 @@ export class InMemoryUserProgressRepository implements UserProgressRepository {
   save(progress: UserProgress): void {
     this.records.push(progress);
   }
+
+  deleteByUserAndChapterIds(userId: string, chapterIds: string[]): void {
+    this.records = this.records.filter(
+      (r) => !(r.userId === userId && chapterIds.includes(r.chapterId)),
+    );
+  }
 }

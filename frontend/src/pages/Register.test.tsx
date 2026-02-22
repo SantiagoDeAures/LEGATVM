@@ -7,14 +7,15 @@ import { AuthProvider } from '../context/AuthContext';
 import { Register } from './Register';
 import { API_URL } from '../shared/constants/API_URL';
 
-function renderRegister() {
-  return render(
+async function renderRegister() {
+  render(
     <AuthProvider>
       <MemoryRouter>
         <Register />
       </MemoryRouter>
     </AuthProvider>
   );
+  await screen.findByRole('button', { name: /registrarme/i });
 }
 
 beforeEach(() => {
@@ -32,35 +33,35 @@ afterEach(() => {
 
 describe('Register', () => {
   describe('form structure', () => {
-    it('renders a field for "Correo electrónico"', () => {
-      renderRegister();
+    it('renders a field for "Correo electrónico"', async () => {
+      await renderRegister();
       expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument();
     });
 
-    it('renders a field for "Nombre de usuario"', () => {
-      renderRegister();
+    it('renders a field for "Nombre de usuario"', async () => {
+      await renderRegister();
       expect(screen.getByLabelText(/nombre de usuario/i)).toBeInTheDocument();
     });
 
-    it('renders a field for "Contraseña"', () => {
-      renderRegister();
+    it('renders a field for "Contraseña"', async () => {
+      await renderRegister();
       expect(screen.getByLabelText(/^contraseña$/i)).toBeInTheDocument();
     });
 
-    it('renders a field for "Confirmar contraseña"', () => {
-      renderRegister();
+    it('renders a field for "Confirmar contraseña"', async () => {
+      await renderRegister();
       expect(screen.getByLabelText(/confirmar contraseña/i)).toBeInTheDocument();
     });
 
-    it('renders a "Registrarme" button', () => {
-      renderRegister();
+    it('renders a "Registrarme" button', async () => {
+      await renderRegister();
       expect(screen.getByRole('button', { name: /registrarme/i })).toBeInTheDocument();
     });
   });
 
   describe('validation – empty fields', () => {
     it('shows error messages when all fields are empty and the form is submitted', async () => {
-      renderRegister();
+      await renderRegister();
       fireEvent.click(screen.getByRole('button', { name: /registrarme/i }));
 
       expect(await screen.findByText(/el correo electrónico es obligatorio/i)).toBeInTheDocument();
@@ -70,7 +71,7 @@ describe('Register', () => {
     });
 
     it('displays error messages in red', async () => {
-      renderRegister();
+      await renderRegister();
       fireEvent.click(screen.getByRole('button', { name: /registrarme/i }));
 
       const errorMessage = await screen.findByText(/el correo electrónico es obligatorio/i);
@@ -81,7 +82,7 @@ describe('Register', () => {
 
   describe('validation – invalid email', () => {
     it('shows an error when the email format is invalid', async () => {
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'invalid-email' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -96,7 +97,7 @@ describe('Register', () => {
 
   describe('validation – password strength', () => {
     it('shows an error when the password has 8 or fewer characters', async () => {
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -109,7 +110,7 @@ describe('Register', () => {
     });
 
     it('shows an error when the password has no letters', async () => {
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -122,7 +123,7 @@ describe('Register', () => {
     });
 
     it('shows an error when the password has no numbers', async () => {
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -140,7 +141,7 @@ describe('Register', () => {
         json: async () => ({ message: 'Usuario registrado correctamente' }),
       });
 
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -157,7 +158,7 @@ describe('Register', () => {
 
   describe('validation – passwords do not match', () => {
     it('shows an error when passwords do not match', async () => {
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -171,11 +172,11 @@ describe('Register', () => {
   });
 
   describe('validation – no API call on invalid form', () => {
-    it('does not call fetch when validation fails', () => {
-      renderRegister();
+    it('does not call fetch when validation fails', async () => {
+      await renderRegister();
       fireEvent.click(screen.getByRole('button', { name: /registrarme/i }));
 
-      // Only the AuthProvider /api/auth/me call should have been made, not a register call
+      // Only the AuthProvider /api/auth/refresh call should have been made, not a register call
       expect(fetch).toHaveBeenCalledTimes(1);
     });
   });
@@ -187,7 +188,7 @@ describe('Register', () => {
         json: async () => ({ message: 'Usuario registrado correctamente' }),
       });
 
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -215,7 +216,7 @@ describe('Register', () => {
         json: async () => ({ message: 'Usuario registrado correctamente' }),
       });
 
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -236,7 +237,7 @@ describe('Register', () => {
         json: async () => ({ message: 'El correo ya está registrado' }),
       });
 
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'taken@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -257,7 +258,7 @@ describe('Register', () => {
         json: async () => ({ message: 'Usuario registrado correctamente' }),
       });
 
-      renderRegister();
+      await renderRegister();
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
@@ -302,6 +303,8 @@ describe('Register', () => {
         </AuthProvider>
       );
 
+      await screen.findByRole('button', { name: /registrarme/i });
+
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'test@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });
       fireEvent.change(screen.getByLabelText(/^contraseña$/i), { target: { value: 'password123' } });
@@ -341,6 +344,8 @@ describe('Register', () => {
           </MemoryRouter>
         </AuthProvider>
       );
+
+      await screen.findByRole('button', { name: /registrarme/i });
 
       fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'taken@example.com' } });
       fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'user1' } });

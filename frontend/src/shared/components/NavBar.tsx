@@ -8,12 +8,7 @@ import { useState } from 'react';
 
 export default function NavBar() {
   const { user, logout } = useAuth();
-  // const user = {
-  //   username: 'Santiago de Aures',
-  //   wallet: {
-  //     balance: 800
-  //   }
-  // }
+
   const location = useLocation();
   const isAbout = location.pathname === '/about';
   const isLogin = location.pathname === '/login';
@@ -87,8 +82,7 @@ export default function NavBar() {
           {
             showProfileOptions &&
             <div className='profile-options'>
-              <a className='profile-option-item' href="#" >Mi perfil</a>
-              <a className='profile-option-item' href="#">Mis volúmenes</a>
+              <a className='profile-option-item' href="/profile" >Mi perfil</a>
               <a className='profile-option-item' onClick={logout}>Cerrar sesión</a>
             </div>
           }

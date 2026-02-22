@@ -20,7 +20,7 @@ describe('AuthContext', () => {
         // @ts-expect-error: Not implemented yet
         fetch.mockResolvedValueOnce({
             ok: true,
-            json: async () => ({ user: mockUser }),
+            json: async () => ({ result: { user: mockUser, accessToken: 'token-123' } }),
         });
         let contextValue: AuthContextType | undefined;
         function TestComponent() {
@@ -44,11 +44,13 @@ describe('AuthContext', () => {
     });
 
     it('login function calls /api/auth/login with credentials and sets user', async () => {
+        // Mock refresh call (fails — no session to restore)
         // @ts-expect-error: Not implemented yet
         fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ user: mockUser }),
+            ok: false,
+            json: async () => ({}),
         });
+
         let contextValue: AuthContextType | undefined;
         function TestComponent() {
             const auth = useContext(AuthContext);
@@ -65,12 +67,25 @@ describe('AuthContext', () => {
                 <TestComponent />
             </AuthProvider>
         );
+
+        // Wait for loading to finish
+        await waitFor(() => {
+            expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+        });
+
+        // Mock login call
+        // @ts-expect-error: Not implemented yet
+        fetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({ user: mockUser, accessToken: 'token-123' }),
+        });
+
         act(() => {
             screen.getByRole('button', { name: /login/i }).click();
         });
         await waitFor(() => {
             expect(fetch).toHaveBeenCalledWith(
-                '/api/auth/login',
+                expect.stringContaining('/api/auth/login'),
                 expect.objectContaining({
                     method: 'POST',
                     credentials: 'include',
@@ -81,8 +96,9 @@ describe('AuthContext', () => {
     });
 
     it('logout function calls /api/auth/logout and clears user', async () => {
+        // Mock refresh call (succeeds — restore session with user)
         (vi.mocked(fetch))
-            .mockResolvedValueOnce({ ok: true, json: async () => ({ user: mockUser }) } as unknown as Response)
+            .mockResolvedValueOnce({ ok: true, json: async () => ({ result: { user: mockUser, accessToken: 'token-123' } }) } as unknown as Response)
 
         let contextValue: AuthContextType | undefined
         function TestComponent() {
@@ -92,7 +108,7 @@ describe('AuthContext', () => {
             useEffect(() => {
                 contextValue = auth;
             }, [auth]);
-            return <button onClick={contextValue?.logout}>Logout</button>;
+            return <button onClick={() => auth?.logout()}>Logout</button>;
         }
 
         render(
@@ -112,7 +128,7 @@ describe('AuthContext', () => {
         });
         await waitFor(() => {
             expect(fetch).toHaveBeenCalledWith(
-                '/api/auth/logout',
+                expect.stringContaining('/api/auth/logout'),
                 expect.objectContaining({
                     method: 'POST',
                     credentials: 'include',

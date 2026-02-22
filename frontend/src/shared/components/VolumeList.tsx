@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { Volume } from '../types/volume';
 import './VolumeList.scss';
 import { useAuth } from '../../hooks/useAuth';
+import VolumeDetails from './VolumeDetails';
+import { useNavigate } from 'react-router';
 
 interface VolumeListProps {
   volumes: Volume[],
@@ -25,7 +27,13 @@ export default function VolumeList({
   }: VolumeListProps) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['Todos']);
   const [search, setSearch] = useState('');
-  // const { isAuthenticated } = useAuth()
+  const [selectedVolumeId, setSelectedVolumeId] = useState<string | null>(null);
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+
+  const redirectToLogin = () => {
+    navigate('/login')
+  }
 
   const handleCategoryChange = (category: string) => {
     if (category === 'Todos') {
@@ -82,13 +90,20 @@ export default function VolumeList({
 
         <div className="volume-cards">
           {filtered.map((volume) => (
-            <div key={volume.id} className="volume-card">
+            <div key={volume.id} className="volume-card" onClick={isAuthenticated ? () => setSelectedVolumeId(volume.id) : redirectToLogin}>
               <img src={volume.thumbnail} alt={volume.title} />
               <div>{volume.title}</div>
             </div>
           ))}
         </div>
       </div>
+
+      {selectedVolumeId && (
+        <VolumeDetails
+          volumeId={selectedVolumeId}
+          onClose={() => setSelectedVolumeId(null)}
+        />
+      )}
     </div>
   );
 }
