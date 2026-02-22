@@ -1,0 +1,76 @@
+@use '../shared/styles/variables' as v;
+
+.challenge-container{
+    background-color: v.$color-primary;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.challenge-section{
+    padding-top: 6.25rem;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: v.$color-font-light;
+    gap: 1.25rem;
+}
+
+.challenge-question{
+    font-family: v.$font-primary;
+    font-size: 1.25rem;
+}
+
+.challenge-options-container{
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5625rem;
+    font-family: v.$font-secondary;
+    font-size: 1.125rem;
+}
+
+.challenge-option-input{
+    color: v.$color-secondary;
+    margin-right: .625rem;
+}
+
+.challenge-button{
+    @include v.boton-estyle
+}
+
+.challenge-error{
+    color: v.$color-font-error;
+}
+
+.challenge-result-container{
+    background-color:  v.$color-secondary;
+    padding: 1.875rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: .9375rem;
+    margin-top: 3.125rem;
+}
+
+.challenge-icon{
+    width: 15.625rem;
+}
+
+.congratulations-image{
+    width: 21.875rem;
+}
+
+.challenge-result{
+    font-family: v.$font-primary;
+}
+
+.challenge-result-message{
+    font-family: v.$font-secondary;
+}

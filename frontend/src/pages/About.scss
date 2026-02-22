@@ -1,0 +1,59 @@
+@use '../shared/styles/variables' as v;
+
+.about-container {
+    background-color: v.$color-secondary;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+.about-description-container {
+    padding-top: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.875rem;
+}
+
+.about-image {
+    width: 31.25rem;
+}
+
+.about-description{
+    width: 56.25rem;
+    font-family: v.$font-primary;
+}
+.about-contact-container{
+    padding: 2.5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 56.25rem;
+    gap: 1.875rem;
+    font-family: v.$font-primary;
+}
+
+.contact-image{
+    width: 18.75rem;
+}
+
+.information-contact-container{
+    display: flex;
+    flex-direction: column;
+    gap: 3.125rem;
+}
+
+.information-contact{
+    display: flex;
+    gap: 1.25rem;
+}
+
+.information-contact-icon{
+    width: 2.1875rem;
+}

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router';
 import NavBar from '../shared/components/NavBar';
 import ResultModal from '../shared/components/ResultModal';
 import { useAuth } from '../hooks/useAuth';
+import LoginImage from '../assets/login-image.png'
+import './Login.scss'
 
 interface FormErrors {
     email?: string;
@@ -50,41 +52,47 @@ export const Login = () => {
 
     return (
         <>
-            <NavBar />
-            <h1>Iniciar sesión</h1>
-            <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-                <div>
-                    <label htmlFor="email">Correo electrónico</label>
-                    <input
-                        id="email"
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+            <div className='login-container'>
+                <NavBar />
+                <div className='login-section-container'>
+                    <img src={LoginImage} alt="login image" className='login-image'/>
+                    <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className='login-form'>
+                    <div className='login-field'>
+                        <label htmlFor="email" className='login-label'>Correo electrónico</label>
+                        <input
+                            id="email"
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className='login-input'
+                        />
+                        {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+                    </div>
+
+                    <div className='login-field'>
+                        <label htmlFor="password" className='login-label'>Contraseña</label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className='login-input'
+                        />
+                        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+                    </div>
+
+                    <button type="submit" className='login-button'>Iniciar sesión</button>
+                </form>
                 </div>
 
-                <div>
-                    <label htmlFor="password">Contraseña</label>
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                {modal && (
+                    <ResultModal
+                        result={modal.result}
+                        message={modal.message}
+                        onClose={() => setModal(null)}
                     />
-                    {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
-                </div>
-
-                <button type="submit">Iniciar sesión</button>
-            </form>
-
-            {modal && (
-                <ResultModal
-                    result={modal.result}
-                    message={modal.message}
-                    onClose={() => setModal(null)}
-                />
-            )}
+                )}
+            </div>
         </>
     );
 }

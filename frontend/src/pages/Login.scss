@@ -1,0 +1,56 @@
+@use '../shared/styles/variables' as v;
+
+.login-container {
+    background-color: v.$color-primary;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.login-section-container {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 6.25rem;
+}
+
+.login-image {
+    width: 50vw;
+    height: 83vh;
+    object-fit: cover;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    padding-left: 6.25rem;
+    font-family: v.$font-primary;
+    gap: 2.1875rem;
+    font-family: v.$font-primary;
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-label {
+    color: v.$color-font-highlight;
+}
+
+.login-input {
+    width: 20.625rem;
+    height: 1.5625rem;
+    border-radius: .625rem;
+    background-color: v.$color-secondary;
+    font-family: v.$font-primary;
+    padding-left: 1.25rem
+}
+
+.login-button{
+        @include v.boton-estyle;
+    width: 8.125rem
+}

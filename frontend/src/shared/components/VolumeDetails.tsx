@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useVolume } from '../../hooks/useVolume';
 import './VolumeDetails.scss'
 import { useNavigate } from 'react-router';
+import coinIcon from '../../assets/coin-icon.png'
 
 interface VolumeDetailsProps {
   volumeId: string | null;
@@ -88,22 +89,23 @@ export default function VolumeDetails({ volumeId, onClose }: VolumeDetailsProps)
       <div data-testid="volume-details-overlay" className="volume-details-overlay" onClick={onClose}>
         <div onClick={(e) => e.stopPropagation()} className='volume-modal-content'>
           <img src={volume.thumbnail} alt={volume.title} className='volume-modal-image'/>
-          <h2>{volume.title}</h2>
-          <p>{volume.description}</p>
+          <h2 className="volume-title" >{volume.title}</h2>
+          <p className="volume-description">{volume.description}</p>
 
  {!owned && (
         <div className='volume-pricing-container'>
-            <p>{volume.price}</p>
-            <button onClick={handlePurchase}>Comprar</button>     
+            <img src={coinIcon} alt="coin icon" className='coin-icon-volume'/>
+            <p className='volume-details-price'>{volume.price}</p>
+            <button onClick={handlePurchase} className='volume-details-button'>Comprar</button>     
         </div>
          )}
 
           {owned && started === false && (
-            <button onClick={volumeAccess}>Comenzar</button>
+            <button onClick={volumeAccess} className='volume-details-button' >Comenzar</button>
           )}
 
           {owned && started === true && (
-            <button onClick={volumeAccess}>Continuar</button>
+            <button onClick={volumeAccess} className='volume-details-button'>Continuar</button>
           )}
         </div>
       </div>

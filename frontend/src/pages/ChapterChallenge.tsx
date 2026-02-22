@@ -3,6 +3,11 @@ import { useAuth } from '../hooks/useAuth';
 import { VolumeContext } from '../context/VolumeContext';
 import { API_URL } from '../shared/constants/API_URL';
 import { useNavigate } from 'react-router';
+import './ChapterChallenge.scss'
+import NavBar from '../shared/components/NavBar';
+import checkImage from '../assets/check-icon.png'
+import errorIcon from '../assets/error-icon.png'
+import congratulationsImage from '../assets/congratulations-image.png'
 
 interface Option {
   id: string;
@@ -64,37 +69,62 @@ export function ChapterChallenge() {
     fetchPrueba();
   }, [volumeId, chapterId, accessToken]);
 
-    const goToVolumeContent = () => {
+  const goToVolumeContent = () => {
     navigate('/volumeContent')
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      (
+        <>
+          <div className='challenge-container'>
+            <NavBar />
+            <div className='challenge-error'>{error}</div>
+
+          </div>
+        </>
+      )
+    )
   }
 
   if (result) {
     if (result.passed && result.message) {
       return (
-        <div>
-          <h2>Congratulations</h2>
-          <p>{result.message}</p>
+        <div className='challenge-container'>
+          <NavBar />
+          <section className='challenge-result-container'>
+            <img src={congratulationsImage} alt="congratulations image" className='congratulations-image' />
+            <h2 className='challenge-result'>Felicidades!</h2>
+            <p className='challenge-result-message' >{result.message}</p>
+          </section>
+
         </div>
       );
     }
     if (result.passed) {
       return (
-        <div>
-          <h2>Muy bien!</h2>
-          <p>Obtuviste un puntaje de {result.score}, puedes continuar con el siguiente capítulo</p>
-          <button onClick={goToVolumeContent}>Continuar</button>
+        <div className='challenge-container'>
+          <NavBar />
+          <section className='challenge-result-container'>
+            <img src={checkImage} alt="check icon" className='challenge-icon' />
+            <h2 className='challenge-result'>Muy bien!</h2>
+            <p className='challenge-result-message'>Obtuviste un puntaje de {result.score}, puedes continuar con el siguiente capítulo</p>
+            <button onClick={goToVolumeContent} className='challenge-button'>Continuar</button>
+          </section>
+
         </div>
       );
     }
     return (
-      <div>
-        <h2>Buen intento!</h2>
-        <p>Obtuviste un puntaje de {result.score}, aún no estás preparado para avanzar al siguiente capítulo</p>
-        <button onClick={goToVolumeContent}>Repetir capítulo.</button>
+      <div className='challenge-container'>
+        <NavBar />
+        <section className='challenge-result-container'>
+          <img src={errorIcon} alt="error icon" className='challenge-icon' />
+          <h2 className='challenge-result'>Buen intento!</h2>
+          <p className='challenge-result-message'>Obtuviste un puntaje de {result.score}, aún no estás preparado para avanzar al siguiente capítulo</p>
+          <button onClick={goToVolumeContent} className='challenge-button'>Repetir capítulo.</button>
+        </section>
+
       </div>
     );
   }
@@ -139,25 +169,35 @@ export function ChapterChallenge() {
 
 
   return (
-    <div>
-      <p>{currentQuestion.question}</p>
-      {currentQuestion.options.map((option) => (
-        <div key={option.id}>
-          <input
-            type="radio"
-            id={`option-${option.id}`}
-            name={`question-${currentQuestion.id}`}
-            checked={selectedOption === option.id}
-            onChange={() => setSelectedOption(option.id)}
-          />
-          <label htmlFor={`option-${option.id}`}>{option.text}</label>
+    <div className='challenge-container'>
+
+      <NavBar />
+      <section className='challenge-section'>
+        <p className='challenge-question'>{currentQuestion.question}</p>
+        <div className='challenge-options-container'>
+
+          {currentQuestion.options.map((option) => (
+            <div key={option.id} className='challenge-options'>
+              <input
+                type="radio"
+                id={`option-${option.id}`}
+                name={`question-${currentQuestion.id}`}
+                checked={selectedOption === option.id}
+                onChange={() => setSelectedOption(option.id)}
+                className='challenge-option-input'
+              />
+              <label htmlFor={`option-${option.id}`} className='challenge-option'>{option.text}</label>
+            </div>
+          ))}
         </div>
-      ))}
-      {isLastQuestion ? (
-        <button onClick={handleSubmit}>Terminar prueba</button>
-      ) : (
-        <button onClick={handleNext}>Siguiente</button>
-      )}
+
+        {isLastQuestion ? (
+          <button onClick={handleSubmit} className='challenge-button'>Terminar prueba</button>
+        ) : (
+          <button onClick={handleNext} className='challenge-button'>Siguiente</button>
+        )}
+      </section>
+
     </div>
   );
 }

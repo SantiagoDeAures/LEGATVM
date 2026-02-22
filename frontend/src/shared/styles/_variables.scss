@@ -12,3 +12,16 @@ $color-font-dark: #000000;
 // Typography
 $font-primary: 'Gabriela', arial;
 $font-secondary: 'Maitree', serif;
+
+@mixin boton-estyle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $color-font-dark;
+    font-family: $font-primary;
+    background-color: $color-accent;
+    border: .0625rem solid $color-accent;
+    border-radius: .625rem;
+    padding: .625rem;
+    font-size: .9375rem;
+}

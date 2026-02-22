@@ -1,6 +1,6 @@
 import './ResultModal.scss';
 
-import successImage from '../../assets/congratulations-image.png';
+import successImage from '../../assets/check-icon.png';
 import failureImage from '../../assets/error-icon.png';
 
 interface ResultModalProps {

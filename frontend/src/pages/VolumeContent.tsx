@@ -4,6 +4,8 @@ import { VolumeContext } from '../context/VolumeContext';
 import { API_URL } from '../shared/constants/API_URL';
 import { useNavigate } from 'react-router';
 import { useVolume } from '../hooks/useVolume';
+import './VolumeContent.scss'
+import NavBar from '../shared/components/NavBar';
 
 interface ChapterData {
   id: string | null;
@@ -46,10 +48,14 @@ export function VolumeContent() {
   if (!chapter) return null;
 
   return (
-    <div>
-      <video data-testid="chapter-video" src={chapter.contentUrl} controls muted={false} />
-      <h2>{chapter.title}</h2>
-      <button onClick={accessToChallenge}>Ir a la prueba</button>
+    <div className='chapter-container'>
+      <NavBar />
+      <section className='chapter-video-section'>
+        <video data-testid="chapter-video" src={chapter.contentUrl} controls muted={false} className='chapter-video' />
+        <h2 className='chapter-title'>{chapter.title}</h2>
+        <button onClick={accessToChallenge} className='chapter-video-button'>Ir a la prueba</button>
+      </section>
+
     </div>
   );
 }

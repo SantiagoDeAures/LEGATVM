@@ -1,3 +1,5 @@
+@use '../styles/variables' as v;
+
 .volume-details-overlay{
   position: fixed;
   top: 0;
@@ -13,7 +15,7 @@
 }
 
 .volume-modal-content{
-    background: #1a1a2e;
+    background: v.$color-primary;
   border-radius: 12px;
   padding: 2rem;
   display: flex;
@@ -21,14 +23,39 @@
   align-items: center;
   gap: 1rem;
   max-width: 800px;
-  height: 31.25rem;
+  height: 32.8125rem;
   width: 90%;
 }
 
 .volume-modal-image{
-    width: 26.875rem;
+    width: 380px;
+}
+
+.volume-title{
+  color: v.$color-font-highlight;
+  font-family: v.$font-primary;
+}
+
+.volume-description{
+  color: v.$color-font-light;
+  font-family: v.$font-secondary;
 }
 
 .volume-pricing-container{
     display: flex;
+    gap: 1.25rem;
+}
+
+.volume-details-price{
+  color: v.$color-font-highlight;
+  font-family: v.$font-primary;
+}
+
+.coin-icon-volume{
+  width: 2.5rem;
+}
+
+.volume-details-button{
+  @include v.boton-estyle;
+  height: 3.125rem;
 }

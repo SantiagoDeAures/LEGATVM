@@ -1,0 +1,58 @@
+@use '../shared/styles/variables' as v;
+
+.profile-details-container{
+    background-color: v.$color-secondary;
+    width: 100vw;
+    height: 100vh;
+}
+
+.profile-details-content{
+    padding-top: 6.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.profile-icon-container{
+    border-radius: 50%;
+    background-color: v.$color-primary;
+    width: 12.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15.625rem;
+}
+
+.profile-icon-information{
+    width: 12.5rem;
+}
+
+.profile-information-container{
+    background-color: v.$color-primary;
+    padding: .9375rem;
+    border-radius: .9375rem;
+    font-family: v.$font-primary;
+}
+
+.profile-field-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .625rem;
+}
+
+.profile-field-label{
+    color: v.$color-font-highlight;
+}
+
+.profile-field-content{
+    color: v.$color-font-light;
+}
+
+.profile-coin-icon{
+    width: 2.5rem;
+}
+
+.profile-recharge-button{
+    @include v.boton-estyle
+}

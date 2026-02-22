@@ -1,0 +1,28 @@
+@use '../shared/styles/variables' as v;
+
+.chapter-container{
+    background-color: v.$color-primary;
+    width: 100vw;
+    height: 100vh;
+}
+
+.chapter-video-section{
+    padding-top: 7.5rem;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.chapter-video{
+    width: 40.625rem;
+}
+
+.chapter-title{
+    color: v.$color-font-light;
+    font-family: v.$font-primary;
+}
+
+.chapter-video-button{
+    @include v.boton-estyle
+}

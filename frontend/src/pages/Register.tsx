@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router';
 import NavBar from '../shared/components/NavBar';
 import ResultModal from '../shared/components/ResultModal';
 import { API_URL } from '../shared/constants/API_URL';
+import RegisterImage from '../assets/register-image.png'
+import './Register.scss'
 
 
 interface FormErrors {
@@ -86,68 +88,79 @@ export const Register = () => {
 
     return (
         <>
-            <NavBar />
-            <h1>Register</h1>
-            <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
-                <div>
-                    <label htmlFor="email">Correo electrónico</label>
-                    <input
-                        id="email"
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+            <div className='register-container'>
+                <NavBar />
+                <div className='register-section-container'>
+
+                    <img src={RegisterImage} alt="register image" className='register-image'/>
+
+                    <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }} className='register-form'>
+                    <div className='register-field'>
+                        <label htmlFor="email" className='register-label'>Correo electrónico</label>
+                        <input
+                            id="email"
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className='register-input'
+                        />
+                        {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+                    </div>
+
+                    <div className='register-field'>
+                        <label htmlFor="username" className='register-label'>Nombre de usuario</label>
+                        <input
+                            id="username"
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className='register-input'
+                        />
+                        {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
+                    </div>
+
+                    <div className='register-field'>
+                        <label htmlFor="password" className='register-label'>Contraseña</label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className='register-input'
+                        />
+                        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+                    </div>
+
+                    <div className='register-field'>
+                        <label htmlFor="confirmPassword" className='register-label'>Confirmar contraseña</label>
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className='register-input'
+                        />
+                        {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
+                    </div>
+
+                    <button className='register-button' type="submit">Registrarme</button>
+                </form>
                 </div>
+                
 
-                <div>
-                    <label htmlFor="username">Nombre de usuario</label>
-                    <input
-                        id="username"
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                {modal && (
+                    <ResultModal
+                        result={modal.result}
+                        message={modal.message}
+                        onClose={() => {
+                            setModal(null);
+                            if (modal.result === 'success') {
+                                navigate('/login');
+                            }
+                        }}
                     />
-                    {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
-                </div>
-
-                <div>
-                    <label htmlFor="password">Contraseña</label>
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
-                </div>
-
-                <div>
-                    <label htmlFor="confirmPassword">Confirmar contraseña</label>
-                    <input
-                        id="confirmPassword"
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
-                </div>
-
-                <button type="submit">Registrarme</button>
-            </form>
-
-            {modal && (
-                <ResultModal
-                    result={modal.result}
-                    message={modal.message}
-                    onClose={() => {
-                        setModal(null);
-                        if (modal.result === 'success') {
-                            navigate('/login');
-                        }
-                    }}
-                />
-            )}
+                )}
+            </div>
         </>
     );
 }

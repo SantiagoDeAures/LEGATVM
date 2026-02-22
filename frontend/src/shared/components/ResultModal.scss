@@ -1,3 +1,5 @@
+@use '../styles/variables' as v;
+
 .result-modal-overlay {
   position: fixed;
   top: 0;
@@ -13,7 +15,7 @@
 }
 
 .result-modal-content {
-  background: #1a1a2e;
+  background: v.$color-secondary;
   border-radius: 12px;
   padding: 2rem;
   display: flex;
@@ -25,13 +27,15 @@
 }
 
 .result-modal-image {
-  width: 120px;
-  height: 120px;
+  width: 17.5rem;
+  // height: 120px;
   object-fit: contain;
+  padding-bottom: 1.25rem;
 }
 
 .result-modal-message {
-  color: #fff;
+  color: v.$color-font-dark;
+  font-family: v.$font-primary;
   font-size: 1.1rem;
   text-align: center;
   margin: 0;

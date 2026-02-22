@@ -76,7 +76,7 @@ userRepository.save(user1)
 walletRepository.save(wallet1)
 
 // Volumes de prueba
-volumeRepository.save(new Volume('01', 'Historia de la IA', 'La IA desde sus orígenes', ['Historia', 'tecnología'], 0, 'https://res.cloudinary.com/dzbllqpfj/image/upload/v1771513999/TheIAStory_uwpe9v.png'));
+volumeRepository.save(new Volume('01', 'Historia de la IA', 'Desde los tiempos más remotos se soñaba con algo que pudiera imitar nuestra capacidad de aprendizaje y de resolución de problemas. ¿Cómo se imaginaban los antiguos la Inteligencia Artificial? ¿Cómo llego la IA a ser lo que es ahora? Resuelve estás questiones ahora navegando a traves de la historia de la IA.', ['Historia', 'Tecnología'], 0, 'https://res.cloudinary.com/dzbllqpfj/image/upload/v1771513999/TheIAStory_uwpe9v.png'));
 volumeRepository.save(new Volume('02', 'Filosofía Griega', 'Desde Tales hasta Aristóteles', ['filosofía'], 100, 'https://example.com/filosofia.jpg'));
 
 // Ana owns volume 01
