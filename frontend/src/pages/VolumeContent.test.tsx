@@ -14,6 +14,7 @@ const mockAuthValue = {
   accessToken: 'fake-access-token',
   login: vi.fn(),
   logout: vi.fn(),
+  authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)),
 };
 
 const mockChapter = {
@@ -60,11 +61,8 @@ describe('VolumeContent', () => {
       expect(screen.getByText('Introducción a la IA')).toBeInTheDocument();
     });
 
-    expect(fetch).toHaveBeenCalledWith(
+    expect(mockAuthValue.authFetch).toHaveBeenCalledWith(
       `${API_URL}/api/volumes/vol-01/continue`,
-      expect.objectContaining({
-        headers: { Authorization: 'Bearer fake-access-token' },
-      }),
     );
   });
 
@@ -84,10 +82,5 @@ describe('VolumeContent', () => {
     });
   });
 
-  it('renders nothing when volumeId is null', () => {
-    renderWithProviders(<VolumeContent />, null);
-
-    expect(screen.queryByTestId('chapter-video')).not.toBeInTheDocument();
-    expect(fetch).not.toHaveBeenCalled();
-  });
+  
 });

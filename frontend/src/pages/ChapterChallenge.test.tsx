@@ -14,6 +14,7 @@ const mockAuthValue = {
   accessToken: 'fake-access-token',
   login: vi.fn(),
   logout: vi.fn(),
+  authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)),
 };
 
 const mockPrueba = {
@@ -63,7 +64,7 @@ function renderWithProviders(ui: ReactNode, volumeId: string | null = 'vol-01', 
 
 describe('ChapterChallenge', () => {
   beforeEach(() => {
-    global.fetch = vi.fn();
+    globalThis.fetch = vi.fn();
   });
 
   afterEach(() => {
@@ -83,11 +84,8 @@ describe('ChapterChallenge', () => {
       expect(screen.getByText('¿Qué es un invierno de IA?')).toBeInTheDocument();
     });
 
-    expect(fetch).toHaveBeenCalledWith(
+    expect(mockAuthValue.authFetch).toHaveBeenCalledWith(
       `${API_URL}/api/volumes/vol-01/chapter-01/prueba`,
-      expect.objectContaining({
-        headers: { Authorization: 'Bearer fake-access-token' },
-      }),
     );
 
     expect(screen.getByText('Una estación del año')).toBeInTheDocument();
@@ -197,11 +195,11 @@ describe('ChapterChallenge', () => {
     expect(screen.getByText('Obtuviste un puntaje de 100, puedes continuar con el siguiente capítulo')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /continuar/i })).toBeInTheDocument();
 
-    expect(fetch).toHaveBeenCalledWith(
+    expect(mockAuthValue.authFetch).toHaveBeenCalledWith(
       `${API_URL}/api/pruebas/prueba-01/submit`,
       expect.objectContaining({
         method: 'POST',
-        headers: expect.objectContaining({ Authorization: 'Bearer fake-access-token' }),
+        headers: expect.objectContaining({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           answers: [
             { questionId: 'q_01', selectedOptions: ['b'] },
@@ -326,7 +324,7 @@ describe('ChapterChallenge', () => {
     });
 
     // Verify only option b was sent for q_01 (the changed answer, not a)
-    expect(fetch).toHaveBeenLastCalledWith(
+    expect(mockAuthValue.authFetch).toHaveBeenLastCalledWith(
       `${API_URL}/api/pruebas/prueba-01/submit`,
       expect.objectContaining({
         body: JSON.stringify({
@@ -378,7 +376,7 @@ describe('ChapterChallenge', () => {
     fireEvent.click(screen.getByRole('button', { name: /terminar prueba/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('Congratulations')).toBeInTheDocument();
+      expect(screen.getByText('Felicidades!')).toBeInTheDocument();
     });
 
     expect(screen.getByText('Has llegado al final de esta historia y has aprendido cosas nuevas, es hora de celebrar!')).toBeInTheDocument();

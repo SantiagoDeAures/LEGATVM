@@ -19,16 +19,16 @@ export class SubmitPrueba {
     private volumeStartRepository: VolumeStartRepository,
   ) {}
 
-  execute(
+  async execute(
     pruebaId: string,
     userId: string,
     answers: SubmitAnswer[] | undefined,
-  ): { status: number; body: Record<string, unknown> } {
+  ): Promise<{ status: number; body: Record<string, unknown> }> {
     if (!answers || !Array.isArray(answers)) {
       return { status: 400, body: { message: 'Se requieren las respuestas' } };
     }
 
-    const prueba = this.pruebaRepository.findById(pruebaId);
+    const prueba = await this.pruebaRepository.findById(pruebaId);
     if (!prueba) {
       return { status: 404, body: { message: 'Prueba no encontrada' } };
     }
@@ -56,14 +56,14 @@ export class SubmitPrueba {
 
     // If passed, mark the chapter as completed for this user
     if (passed) {
-      this.userProgressRepository.save(
+      await this.userProgressRepository.save(
         new UserProgress(userId, prueba.chapterId, true),
       );
 
       // Check if all chapters in the volume are now completed
-      const chapters = this.chapterRepository.findByVolumeId(prueba.volumeId);
+      const chapters = await this.chapterRepository.findByVolumeId(prueba.volumeId);
       const chapterIds = chapters.map((ch) => ch.id);
-      const allProgress = this.userProgressRepository.findByUserAndChapterIds(userId, chapterIds);
+      const allProgress = await this.userProgressRepository.findByUserAndChapterIds(userId, chapterIds);
       const completedIds = new Set(
         allProgress.filter((p) => p.isCompleted).map((p) => p.chapterId),
       );
@@ -71,8 +71,8 @@ export class SubmitPrueba {
       responseBody.volumeCompleted = volumeCompleted;
 
       if (volumeCompleted) {
-        this.volumeStartRepository.markUnstarted(userId, prueba.volumeId);
-        this.userProgressRepository.deleteByUserAndChapterIds(userId, chapterIds);
+        await this.volumeStartRepository.markUnstarted(userId, prueba.volumeId);
+        await this.userProgressRepository.deleteByUserAndChapterIds(userId, chapterIds);
         responseBody.message = 'Has llegado al final de esta historia y has aprendido cosas nuevas, es hora de celebrar!';
       }
     }

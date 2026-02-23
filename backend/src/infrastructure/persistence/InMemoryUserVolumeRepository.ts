@@ -1,19 +1,19 @@
-import { UserVolumeRepository } from '../../application/ports/UserVolumeRepository';
+import { UserVolumeRepository } from '../../application/ports/UserVolumeRepository.js';
 
 export class InMemoryUserVolumeRepository implements UserVolumeRepository {
   private entries: { userId: string; volumeId: string }[] = [];
 
-  findVolumeIdsByUserId(userId: string): string[] {
+  async findVolumeIdsByUserId(userId: string): Promise<string[]> {
     return this.entries
       .filter((e) => e.userId === userId)
       .map((e) => e.volumeId);
   }
 
-  hasVolume(userId: string, volumeId: string): boolean {
+  async hasVolume(userId: string, volumeId: string): Promise<boolean> {
     return this.entries.some((e) => e.userId === userId && e.volumeId === volumeId);
   }
 
-  save(userId: string, volumeId: string): void {
+  async save(userId: string, volumeId: string): Promise<void> {
     this.entries.push({ userId, volumeId });
   }
 }

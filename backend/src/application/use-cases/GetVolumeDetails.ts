@@ -7,13 +7,13 @@ export class GetVolumeDetails {
     private userVolumeRepository: UserVolumeRepository,
   ) {}
 
-  execute(volumeId: string, userId: string): { status: number; body: Record<string, unknown> } {
-    const volume = this.volumeRepository.findById(volumeId);
+  async execute(volumeId: string, userId: string): Promise<{ status: number; body: Record<string, unknown> }> {
+    const volume = await this.volumeRepository.findById(volumeId);
     if (!volume) {
       return { status: 404, body: { message: 'Volumen no encontrado' } };
     }
 
-    const owned = this.userVolumeRepository.hasVolume(userId, volumeId);
+    const owned = await this.userVolumeRepository.hasVolume(userId, volumeId);
 
     return {
       status: 200,

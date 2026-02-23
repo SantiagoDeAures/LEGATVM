@@ -14,6 +14,7 @@ const mockAuthValue = {
   accessToken: 'fake-access-token',
   login: vi.fn(),
   logout: vi.fn(),
+  authFetch: vi.fn((...args: Parameters<typeof fetch>) => fetch(...args)),
 };
 
 function renderWithAuth(ui: ReactNode) {
@@ -89,9 +90,8 @@ describe('VolumeDetails', () => {
     renderWithAuth(<VolumeDetails volumeId="02" onClose={() => {}} />);
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(
+      expect(mockAuthValue.authFetch).toHaveBeenCalledWith(
         `${API_URL}/api/volumes/02`,
-        expect.objectContaining({ credentials: 'include' }),
       );
     });
   });
@@ -154,9 +154,8 @@ describe('VolumeDetails', () => {
     renderWithAuth(<VolumeDetails volumeId="01" onClose={() => {}} />);
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(
+      expect(mockAuthValue.authFetch).toHaveBeenCalledWith(
         `${API_URL}/api/volumes/01/started`,
-        expect.objectContaining({ credentials: 'include' }),
       );
     });
   });
@@ -209,9 +208,9 @@ describe('VolumeDetails', () => {
     fireEvent.click(screen.getByRole('button', { name: /comprar/i }));
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(
+      expect(mockAuthValue.authFetch).toHaveBeenCalledWith(
         `${API_URL}/api/volumes/02/purchase`,
-        expect.objectContaining({ method: 'POST', credentials: 'include' }),
+        expect.objectContaining({ method: 'POST' }),
       );
     });
   });

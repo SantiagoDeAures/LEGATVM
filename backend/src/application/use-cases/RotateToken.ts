@@ -21,7 +21,7 @@ export class RotateToken {
 
         const { userId } = validateToken as TokenPayload
 
-        const user = this.userRepository.findById(userId)
+        const user = await this.userRepository.findById(userId)
         if (!user) {
             throw new Error('Usuario no encontrado')
         }

@@ -1,20 +1,20 @@
-import { Prueba } from '../../domain/Prueba';
-import { PruebaRepository } from '../../application/ports/PruebaRepository';
+import { Prueba } from '../../domain/Prueba.js';
+import { PruebaRepository } from '../../application/ports/PruebaRepository.js';
 
 export class InMemoryPruebaRepository implements PruebaRepository {
   private pruebas: Prueba[] = [];
 
-  findByVolumeAndChapter(volumeId: string, chapterId: string): Prueba | undefined {
+  async findByVolumeAndChapter(volumeId: string, chapterId: string): Promise<Prueba | undefined> {
     return this.pruebas.find(
       (p) => p.volumeId === volumeId && p.chapterId === chapterId,
     );
   }
 
-  findById(id: string): Prueba | undefined {
+  async findById(id: string): Promise<Prueba | undefined> {
     return this.pruebas.find((p) => p.id === id);
   }
 
-  save(prueba: Prueba): void {
+  async save(prueba: Prueba): Promise<void> {
     this.pruebas.push(prueba);
   }
 }

@@ -9,20 +9,20 @@ import { CheckVolumeStarted } from '../../../application/use-cases/CheckVolumeSt
 export function createVolumeRouter(getVolumes: GetVolumes, getVolumeDetails: GetVolumeDetails, continueVolume: ContinueVolume, getPrueba: GetPrueba, purchaseVolume: PurchaseVolume, checkVolumeStarted: CheckVolumeStarted): Router {
   const router = Router();
 
-  router.get('/', (req, res) => {
+  router.get('/', async (req, res) => {
     const category = req.query.category as string | undefined;
-    const result = getVolumes.execute(category);
+    const result = await getVolumes.execute(category);
     return res.status(result.status).json(result.body);
   });
 
-  router.get('/:volumeId/continue', (req, res) => {
+  router.get('/:volumeId/continue', async (req, res) => {
     const userId = (req as any).userId as string;
-    const result = continueVolume.execute(req.params.volumeId, userId);
+    const result = await continueVolume.execute(req.params.volumeId, userId);
     return res.status(result.status).json(result.body);
   });
 
-  router.get('/:volumeId/:chapterId/prueba', (req, res) => {
-    const result = getPrueba.execute(req.params.volumeId, req.params.chapterId);
+  router.get('/:volumeId/:chapterId/prueba', async (req, res) => {
+    const result = await getPrueba.execute(req.params.volumeId, req.params.chapterId);
     return res.status(result.status).json(result.body);
   });
 
@@ -32,15 +32,15 @@ export function createVolumeRouter(getVolumes: GetVolumes, getVolumeDetails: Get
     return res.status(result.status).json(result.body);
   });
 
-  router.get('/:volumeId/started', (req, res) => {
+  router.get('/:volumeId/started', async (req, res) => {
     const userId = (req as any).userId as string;
-    const result = checkVolumeStarted.execute(userId, req.params.volumeId);
+    const result = await checkVolumeStarted.execute(userId, req.params.volumeId);
     return res.status(result.status).json(result.body);
   });
 
-  router.get('/:volumeId', (req, res) => {
+  router.get('/:volumeId', async (req, res) => {
     const userId = (req as any).userId as string;
-    const result = getVolumeDetails.execute(req.params.volumeId, userId);
+    const result = await getVolumeDetails.execute(req.params.volumeId, userId);
     return res.status(result.status).json(result.body);
   });
 

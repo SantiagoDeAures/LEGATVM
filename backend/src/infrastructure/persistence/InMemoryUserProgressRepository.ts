@@ -1,20 +1,20 @@
-import { UserProgress } from '../../domain/UserProgress';
-import { UserProgressRepository } from '../../application/ports/UserProgressRepository';
+import { UserProgress } from '../../domain/UserProgress.js';
+import { UserProgressRepository } from '../../application/ports/UserProgressRepository.js';
 
 export class InMemoryUserProgressRepository implements UserProgressRepository {
   private records: UserProgress[] = [];
 
-  findByUserAndChapterIds(userId: string, chapterIds: string[]): UserProgress[] {
+  async findByUserAndChapterIds(userId: string, chapterIds: string[]): Promise<UserProgress[]> {
     return this.records.filter(
       (r) => r.userId === userId && chapterIds.includes(r.chapterId),
     );
   }
 
-  save(progress: UserProgress): void {
+  async save(progress: UserProgress): Promise<void> {
     this.records.push(progress);
   }
 
-  deleteByUserAndChapterIds(userId: string, chapterIds: string[]): void {
+  async deleteByUserAndChapterIds(userId: string, chapterIds: string[]): Promise<void> {
     this.records = this.records.filter(
       (r) => !(r.userId === userId && chapterIds.includes(r.chapterId)),
     );

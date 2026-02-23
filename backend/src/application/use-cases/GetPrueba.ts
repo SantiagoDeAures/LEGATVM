@@ -3,8 +3,8 @@ import { PruebaRepository } from '../ports/PruebaRepository';
 export class GetPrueba {
   constructor(private pruebaRepository: PruebaRepository) {}
 
-  execute(volumeId: string, chapterId: string): { status: number; body: Record<string, unknown> } {
-    const prueba = this.pruebaRepository.findByVolumeAndChapter(volumeId, chapterId);
+  async execute(volumeId: string, chapterId: string): Promise<{ status: number; body: Record<string, unknown> }> {
+    const prueba = await this.pruebaRepository.findByVolumeAndChapter(volumeId, chapterId);
     if (!prueba) {
       return { status: 404, body: { message: 'Prueba no encontrada' } };
     }

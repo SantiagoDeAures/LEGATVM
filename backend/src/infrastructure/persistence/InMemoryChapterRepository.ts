@@ -1,14 +1,14 @@
-import { Chapter } from '../../domain/Chapter';
-import { ChapterRepository } from '../../application/ports/ChapterRepository';
+import { Chapter } from '../../domain/Chapter.js';
+import { ChapterRepository } from '../../application/ports/ChapterRepository.js';
 
 export class InMemoryChapterRepository implements ChapterRepository {
   private chapters: Chapter[] = [];
 
-  findByVolumeId(volumeId: string): Chapter[] {
+  async findByVolumeId(volumeId: string): Promise<Chapter[]> {
     return this.chapters.filter((c) => c.volumeId === volumeId);
   }
 
-  save(chapter: Chapter): void {
+  async save(chapter: Chapter): Promise<void> {
     this.chapters.push(chapter);
   }
 }

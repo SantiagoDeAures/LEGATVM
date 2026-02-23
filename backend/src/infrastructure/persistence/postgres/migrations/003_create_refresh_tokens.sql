@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS refresh_tokens (
+  token_hash VARCHAR(64) PRIMARY KEY,
+  user_id    VARCHAR(255) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at TIMESTAMP NOT NULL
+);

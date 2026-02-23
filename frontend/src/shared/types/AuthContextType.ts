@@ -11,4 +11,5 @@ export interface AuthContextType  {
     accessToken: string | null;
     login: (email: string, password: string) => Promise<LoginResult>
     logout: () => Promise<void>
+    authFetch: (url: string, options?: RequestInit) => Promise<Response>
 }

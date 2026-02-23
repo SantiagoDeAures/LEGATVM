@@ -18,6 +18,10 @@ export class User {
         return isMatch
     }
 
+    get password(): string {
+        return this._password;
+    }
+
     static fromPersistence(data: any): User {
         return new User(data.id, data.username, data.email, data.password);
     }

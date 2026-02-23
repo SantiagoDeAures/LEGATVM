@@ -17,7 +17,7 @@ interface ChapterData {
 }
 
 export function VolumeContent() {
-  const { accessToken } = useAuth();
+  const { authFetch } = useAuth();
   const { setchapterId } = useVolume()
   const volumeContext = useContext(VolumeContext);
   const volumeId = volumeContext?.volumeId ?? null;
@@ -28,17 +28,14 @@ export function VolumeContent() {
     if (!volumeId) return;
 
     const fetchChapter = async () => {
-      const res = await fetch(`${API_URL}/api/volumes/${volumeId}/continue`, {
-        credentials: 'include',
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      const res = await authFetch(`${API_URL}/api/volumes/${volumeId}/continue`);
       if (!res.ok) return;
       const data = await res.json();
       setChapter(data);
     };
 
     fetchChapter();
-  }, [volumeId, accessToken]);
+  }, [volumeId, authFetch]);
 
   const accessToChallenge = () => {
     setchapterId(chapter?.id ?? null)

@@ -10,12 +10,12 @@ export class PurchaseVolume {
   ) {}
 
   async execute(userId: string, volumeId: string): Promise<{ status: number; body: Record<string, unknown> }> {
-    const volume = this.volumeRepository.findById(volumeId);
+    const volume = await this.volumeRepository.findById(volumeId);
     if (!volume) {
       return { status: 404, body: { message: 'Volumen no encontrado' } };
     }
 
-    const alreadyOwned = this.userVolumeRepository.hasVolume(userId, volumeId);
+    const alreadyOwned = await this.userVolumeRepository.hasVolume(userId, volumeId);
     if (alreadyOwned) {
       return { status: 409, body: { message: 'Ya posees este volumen' } };
     }
@@ -32,7 +32,7 @@ export class PurchaseVolume {
     }
 
     await this.walletRepository.update(userId, wallet);
-    this.userVolumeRepository.save(userId, volumeId);
+    await this.userVolumeRepository.save(userId, volumeId);
 
     return {
       status: 200,

@@ -40,7 +40,7 @@ interface Answer {
 }
 
 export function ChapterChallenge() {
-  const { accessToken } = useAuth();
+  const { authFetch } = useAuth();
   const volumeContext = useContext(VolumeContext);
   const volumeId = volumeContext?.volumeId ?? null;
   const chapterId = volumeContext?.chapterId ?? null;
@@ -57,17 +57,14 @@ export function ChapterChallenge() {
     if (!volumeId || !chapterId) return;
 
     const fetchPrueba = async () => {
-      const res = await fetch(`${API_URL}/api/volumes/${volumeId}/${chapterId}/prueba`, {
-        credentials: 'include',
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      const res = await authFetch(`${API_URL}/api/volumes/${volumeId}/${chapterId}/prueba`);
       if (!res.ok) return;
       const data = await res.json();
       setPrueba(data);
     };
 
     fetchPrueba();
-  }, [volumeId, chapterId, accessToken]);
+  }, [volumeId, chapterId, authFetch]);
 
   const goToVolumeContent = () => {
     navigate('/volumeContent')
@@ -148,12 +145,10 @@ export function ChapterChallenge() {
 
     const finalAnswers = [...answers, { questionId: currentQuestion.id, selectedOptions: [selectedOption] }];
 
-    const res = await fetch(`${API_URL}/api/pruebas/${prueba.id}/submit`, {
+    const res = await authFetch(`${API_URL}/api/pruebas/${prueba.id}/submit`, {
       method: 'POST',
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({ answers: finalAnswers }),
     });

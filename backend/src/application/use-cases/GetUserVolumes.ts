@@ -7,9 +7,9 @@ export class GetUserVolumes {
     private volumeRepository: VolumeRepository,
   ) {}
 
-  execute(userId: string): { status: number; body: { data: Array<{ id: string; title: string; thumbnail: string }> } } {
-    const volumeIds = this.userVolumeRepository.findVolumeIdsByUserId(userId);
-    const allVolumes = this.volumeRepository.findAll();
+  async execute(userId: string): Promise<{ status: number; body: { data: Array<{ id: string; title: string; thumbnail: string }> } }> {
+    const volumeIds = await this.userVolumeRepository.findVolumeIdsByUserId(userId);
+    const allVolumes = await this.volumeRepository.findAll();
 
     const userVolumes = allVolumes
       .filter((v) => volumeIds.includes(v.id))

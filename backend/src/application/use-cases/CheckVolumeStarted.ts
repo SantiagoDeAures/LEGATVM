@@ -7,13 +7,13 @@ export class CheckVolumeStarted {
     private volumeStartRepository: VolumeStartRepository,
   ) {}
 
-  execute(userId: string, volumeId: string): { status: number; body: Record<string, unknown> } {
-    const volume = this.volumeRepository.findById(volumeId);
+  async execute(userId: string, volumeId: string): Promise<{ status: number; body: Record<string, unknown> }> {
+    const volume = await this.volumeRepository.findById(volumeId);
     if (!volume) {
       return { status: 404, body: { message: 'Volumen no encontrado' } };
     }
 
-    const started = this.volumeStartRepository.hasStarted(userId, volumeId);
+    const started = await this.volumeStartRepository.hasStarted(userId, volumeId);
 
     return {
       status: 200,

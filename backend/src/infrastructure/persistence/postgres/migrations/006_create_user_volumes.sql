@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS user_volumes (
+  user_id   VARCHAR(255) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  volume_id VARCHAR(255) NOT NULL REFERENCES volumes(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, volume_id)
+);

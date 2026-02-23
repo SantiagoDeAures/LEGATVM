@@ -1,24 +1,22 @@
-import { User } from '../../domain/User';
-import { UserRepository } from '../../application/ports/UserRepository';
+import { User } from '../../domain/User.js';
+import { UserRepository } from '../../application/ports/UserRepository.js';
 
 export class InMemoryUserRepository implements UserRepository {
   private users: User[] = [];
 
-  findById(id: string): User | undefined {
+  async findById(id: string): Promise<User | undefined> {
     return this.users.find(u => u.id === id);
   }
 
-  findByEmail(email: string): User | undefined {
+  async findByEmail(email: string): Promise<User | undefined> {
     return this.users.find(u => u.email === email);
   }
 
-  findByUsername(username: string): User | undefined {
-    console.log(this.users)
+  async findByUsername(username: string): Promise<User | undefined> {
     return this.users.find(u => u.username === username);
   }
 
-  save(user: User): void {
+  async save(user: User): Promise<void> {
     this.users.push(user);
   }
-
 }

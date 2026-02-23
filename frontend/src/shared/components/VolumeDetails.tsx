@@ -23,7 +23,7 @@ interface VolumeData {
 }
 
 export default function VolumeDetails({ volumeId, onClose }: VolumeDetailsProps) {
-  const { accessToken } = useAuth();
+  const { authFetch } = useAuth();
   const { setVolumeId } = useVolume();
   const [volume, setVolume] = useState<VolumeData | null>(null);
   const [owned, setOwned] = useState(false);
@@ -32,20 +32,15 @@ export default function VolumeDetails({ volumeId, onClose }: VolumeDetailsProps)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const authHeaders = {
-      credentials: 'include' as const,
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-
     const fetchDetails = async () => {
-      const res = await fetch(`${API_URL}/api/volumes/${volumeId}`, authHeaders);
+      const res = await authFetch(`${API_URL}/api/volumes/${volumeId}`);
       if (!res.ok) return;
       const data = await res.json();
       setVolume(data);
       setOwned(data.owned);
 
       if (data.owned) {
-        const startedRes = await fetch(`${API_URL}/api/volumes/${volumeId}/started`, authHeaders);
+        const startedRes = await authFetch(`${API_URL}/api/volumes/${volumeId}/started`);
         if (startedRes.ok) {
           const startedData = await startedRes.json();
           setStarted(startedData.started);
@@ -54,17 +49,11 @@ export default function VolumeDetails({ volumeId, onClose }: VolumeDetailsProps)
     };
 
     fetchDetails();
-  }, [volumeId, accessToken]);
+  }, [volumeId, authFetch]);
 
   const handlePurchase = async () => {
-    const authHeaders = {
-      credentials: 'include' as const,
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-
-    const res = await fetch(`${API_URL}/api/volumes/${volumeId}/purchase`, {
+    const res = await authFetch(`${API_URL}/api/volumes/${volumeId}/purchase`, {
       method: 'POST',
-      ...authHeaders,
     });
     const data = await res.json();
 

@@ -27,7 +27,7 @@ export class RegisterUser {
       return { status: 400, body: { message: 'Faltan campos requeridos' } };
     }
 
-    if (this.userRepository.findByEmail(email) || this.userRepository.findByUsername(username)) {
+    if (await this.userRepository.findByEmail(email) || await this.userRepository.findByUsername(username)) {
       return { status: 409, body: { message: 'Usuario o email ya existe' } };
     }
 
@@ -36,7 +36,7 @@ export class RegisterUser {
     const newUser = await User.create(id, username, email, password)
     const newWallet = Wallet.createNew(newUser.id)
 
-    this.userRepository.save(newUser);
+    await this.userRepository.save(newUser);
     this.walletRepository.save(newWallet)
 
     return { status: 201, body: { message: 'Registro exitoso. Ahora puedes acceder a tu cuenta' } };

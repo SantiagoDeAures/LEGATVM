@@ -25,7 +25,7 @@ export class LoginUser {
       return { status: 400, body: { message: 'Faltan campos requeridos' } };
     }
 
-    const user = this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findByEmail(email);
     if (!user || !(await user.passwordMatches(password))) {
       return { status: 401, body: { message: 'Credenciales inválidas' } };
     }

@@ -11,17 +11,17 @@ export class ContinueVolume {
     private volumeStartRepository: VolumeStartRepository,
   ) {}
 
-  execute(volumeId: string, userId: string): { status: number; body: Record<string, unknown> } {
-    const volume = this.volumeRepository.findById(volumeId);
+  async execute(volumeId: string, userId: string): Promise<{ status: number; body: Record<string, unknown> }> {
+    const volume = await this.volumeRepository.findById(volumeId);
     if (!volume) {
       return { status: 404, body: { message: 'Volumen no encontrado' } };
     }
 
-    this.volumeStartRepository.markStarted(userId, volumeId);
+    await this.volumeStartRepository.markStarted(userId, volumeId);
 
-    const chapters = this.chapterRepository.findByVolumeId(volumeId);
+    const chapters = await this.chapterRepository.findByVolumeId(volumeId);
     const chapterIds = chapters.map((ch) => ch.id);
-    const progressRecords = this.userProgressRepository.findByUserAndChapterIds(userId, chapterIds);
+    const progressRecords = await this.userProgressRepository.findByUserAndChapterIds(userId, chapterIds);
 
     const completedChapterIds = new Set(
       progressRecords.filter((p) => p.isCompleted).map((p) => p.chapterId),

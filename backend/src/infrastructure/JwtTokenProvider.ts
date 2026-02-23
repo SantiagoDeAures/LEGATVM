@@ -9,7 +9,7 @@ export class JwtTokenProvider implements TokenProvider{
     // verificar si está implementación es correcta
 
     generateAccessToken(userId: string): string {
-        return jwt.sign({ userId }, this.secret, { expiresIn: '15m' })
+        return jwt.sign({ userId }, this.secret, { expiresIn: '59m' })
     }
 
     generateRefreshToken(userId: string): string{

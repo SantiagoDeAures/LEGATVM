@@ -1,38 +1,32 @@
 import express from 'express';
-import { InMemoryUserRepository } from './infrastructure/persistence/InMemoryUserRepository';
+import { PostgresUserRepository } from './infrastructure/persistence/postgres/PostgresUserRepository';
 import { RegisterUser } from './application/use-cases/RegisterUser';
 import { LoginUser } from './application/use-cases/LoginUser';
 import { createAuthRouter } from './infrastructure/http/routes/authRoutes';
-import { InMemoryWalletRepository } from './infrastructure/persistence/InMemoryWalletRepository';
-import { InMemoryAuthRepository } from './infrastructure/persistence/InMemoryAuthRepository'
+import { PostgresWalletRepository } from './infrastructure/persistence/postgres/PostgresWalletRepository';
+import { PostgresAuthRepository } from './infrastructure/persistence/postgres/PostgresAuthRepository';
 import { JwtTokenProvider } from './infrastructure/JwtTokenProvider'
 import cookieparser from 'cookie-parser'
 import cors from 'cors'
-import { User } from './domain/User';
-import { Wallet } from './domain/Wallet';
 import { LogoutUser } from './application/use-cases/LogoutUser';
 import { RotateToken } from './application/use-cases/RotateToken';
 import { createAuthMiddleware } from './infrastructure/http/middleware/authMiddleware';
-import { InMemoryVolumeRepository } from './infrastructure/persistence/InMemoryVolumeRepository';
-import { Volume } from './domain/Volume';
+import { PostgresVolumeRepository } from './infrastructure/persistence/postgres/PostgresVolumeRepository';
 import { GetVolumes } from './application/use-cases/GetVolumes';
 import { GetVolumeDetails } from './application/use-cases/GetVolumeDetails';
 import { createVolumeRouter } from './infrastructure/http/routes/volumeRoutes';
-import { InMemoryUserVolumeRepository } from './infrastructure/persistence/InMemoryUserVolumeRepository';
+import { PostgresUserVolumeRepository } from './infrastructure/persistence/postgres/PostgresUserVolumeRepository';
 import { GetUserVolumes } from './application/use-cases/GetUserVolumes';
 import { createUserRouter } from './infrastructure/http/routes/userRoutes';
-import { InMemoryChapterRepository } from './infrastructure/persistence/InMemoryChapterRepository';
-import { Chapter } from './domain/Chapter';
+import { PostgresChapterRepository } from './infrastructure/persistence/postgres/PostgresChapterRepository';
 import { ContinueVolume } from './application/use-cases/ContinueVolume';
-import { InMemoryUserProgressRepository } from './infrastructure/persistence/InMemoryUserProgressRepository';
-import { UserProgress } from './domain/UserProgress';
-import { InMemoryPruebaRepository } from './infrastructure/persistence/InMemoryPruebaRepository';
-import { Prueba, Question, Option } from './domain/Prueba';
+import { PostgresUserProgressRepository } from './infrastructure/persistence/postgres/PostgresUserProgressRepository';
+import { PostgresPruebaRepository } from './infrastructure/persistence/postgres/PostgresPruebaRepository';
 import { GetPrueba } from './application/use-cases/GetPrueba';
 import { SubmitPrueba } from './application/use-cases/SubmitPrueba';
 import { createPruebaRouter } from './infrastructure/http/routes/pruebaRoutes';
 import { PurchaseVolume } from './application/use-cases/PurchaseVolume';
-import { InMemoryVolumeStartRepository } from './infrastructure/persistence/InMemoryVolumeStartRepository';
+import { PostgresVolumeStartRepository } from './infrastructure/persistence/postgres/PostgresVolumeStartRepository';
 import { CheckVolumeStarted } from './application/use-cases/CheckVolumeStarted';
 
 export const app = express();
@@ -48,188 +42,19 @@ app.use(cors({
 app.use(cookieparser())
 
 // Persistence
-const userRepository = new InMemoryUserRepository();
-const walletRepository = new InMemoryWalletRepository();
-const authRepository = new InMemoryAuthRepository();
+const userRepository = new PostgresUserRepository();
+const walletRepository = new PostgresWalletRepository();
+const authRepository = new PostgresAuthRepository();
 const authProvider = new JwtTokenProvider()
-const volumeRepository = new InMemoryVolumeRepository();
-const userVolumeRepository = new InMemoryUserVolumeRepository();
-const chapterRepository = new InMemoryChapterRepository();
-const userProgressRepository = new InMemoryUserProgressRepository();
-const pruebaRepository = new InMemoryPruebaRepository();
-const volumeStartRepository = new InMemoryVolumeStartRepository();
+const volumeRepository = new PostgresVolumeRepository();
+const userVolumeRepository = new PostgresUserVolumeRepository();
+const chapterRepository = new PostgresChapterRepository();
+const userProgressRepository = new PostgresUserProgressRepository();
+const pruebaRepository = new PostgresPruebaRepository();
+const volumeStartRepository = new PostgresVolumeStartRepository();
 
 // Auth Middleware
 app.use(createAuthMiddleware(authProvider));
-
-//Datos de prueba para test**********************************************************************************************
-const nextWeek = new Date();
-const user1 = await User.create('user-uuid-1', 'Ana Developer', 'ana@test.com', '123456');
-// Simulamos que Ana ya tiene 500 monedas (más del inicial)
-const wallet1 = new Wallet('user-uuid-1', 500);
-await authRepository.saveRefreshToken({
-  token: 'token-seguro-para-logout-123', // El token crudo
-  userId: 'user-uuid-1',                 // Pertenece a Ana
-  expiresAt: nextWeek
-});
-userRepository.save(user1)
-walletRepository.save(wallet1)
-
-// Volumes de prueba
-volumeRepository.save(new Volume('01', 'Historia de la IA', 'Desde los tiempos más remotos se soñaba con algo que pudiera imitar nuestra capacidad de aprendizaje y de resolución de problemas. ¿Cómo se imaginaban los antiguos la Inteligencia Artificial? ¿Cómo llego la IA a ser lo que es ahora? Resuelve estás questiones ahora navegando a traves de la historia de la IA.', ['Historia', 'Tecnología'], 0, 'https://res.cloudinary.com/dzbllqpfj/image/upload/v1771513999/TheIAStory_uwpe9v.png'));
-volumeRepository.save(new Volume('02', 'Filosofía Griega', 'Desde Tales hasta Aristóteles', ['filosofía'], 100, 'https://example.com/filosofia.jpg'));
-
-// Ana owns volume 01
-userVolumeRepository.save('user-uuid-1', '01');
-
-// Chapters for volume 01 (pure content, no progress state)
-chapterRepository.save(new Chapter('ch-01', '01', 'Orígenes de la IA', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771680165/IAstory-Chapter1_y3ongr.mp4'));
-chapterRepository.save(new Chapter('ch-02', '01', 'El test de Turing', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771680264/IAStory-chaper2_cwanhr.mp4'));
-chapterRepository.save(new Chapter('ch-03', '01', 'Redes neuronales', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771680307/IAStory-chaper3_vofmet.mp4'));
-chapterRepository.save(new Chapter('ch-04', '01', 'Aprendizaje profundo', 'video', 'https://res.cloudinary.com/dzbllqpfj/video/upload/v1771680341/IAStory-chaper4_pqgmzw.mp4'));
-
-// Ana's progress on volume 01 — completed first 2 chapters
-userProgressRepository.save(new UserProgress('user-uuid-1', 'ch-01', true));
-userProgressRepository.save(new UserProgress('user-uuid-1', 'ch-02', true));
-
-// Ana has started volume 01
-volumeStartRepository.markStarted('user-uuid-1', '01');
-
-// Prueba for chapter 01 of volume 01
-pruebaRepository.save(new Prueba('01', '01', 'ch-01', [
-  new Question('q_01', '¿Quién acuñó el término Inteligencia Artificial?', [
-    new Option('a', 'Alan Turing'),
-    new Option('b', 'John McCarthy'),
-    new Option('c', 'Marvin Minsky'),
-    new Option('d', 'Claude Shannon'),
-  ], ['b']),
-  new Question('q_02', '¿En qué año fue la conferencia de Dartmouth?', [
-    new Option('a', '1950'),
-    new Option('b', '1956'),
-    new Option('c', '1960'),
-    new Option('d', '1965'),
-  ], ['b']),
-  new Question('q_03', '¿Qué propuso Alan Turing en 1950?', [
-    new Option('a', 'La máquina de Von Neumann'),
-    new Option('b', 'El test de Turing'),
-    new Option('c', 'El perceptrón'),
-    new Option('d', 'La red neuronal'),
-  ], ['b']),
-  new Question('q_04', '¿Cuál fue el primer programa de ajedrez?', [
-    new Option('a', 'Deep Blue'),
-    new Option('b', 'Turochamp'),
-    new Option('c', 'AlphaGo'),
-    new Option('d', 'Stockfish'),
-  ], ['b']),
-  new Question('q_05', '¿Qué es el invierno de la IA?', [
-    new Option('a', 'Una estación del año'),
-    new Option('b', 'Un período de reducción de fondos e interés en IA'),
-    new Option('c', 'Un algoritmo de enfriamiento'),
-    new Option('d', 'Una técnica de optimización'),
-  ], ['b']),
-]));
-
-pruebaRepository.save(new Prueba('02', '01', 'ch-02', [
-  new Question('q_01', '¿Quién acuñó el término Inteligencia Artificial?', [
-    new Option('a', 'Alan Turing'),
-    new Option('b', 'John McCarthy'),
-    new Option('c', 'Marvin Minsky'),
-    new Option('d', 'Claude Shannon'),
-  ], ['b']),
-  new Question('q_02', '¿En qué año fue la conferencia de Dartmouth?', [
-    new Option('a', '1950'),
-    new Option('b', '1956'),
-    new Option('c', '1960'),
-    new Option('d', '1965'),
-  ], ['b']),
-  new Question('q_03', '¿Qué propuso Alan Turing en 1950?', [
-    new Option('a', 'La máquina de Von Neumann'),
-    new Option('b', 'El test de Turing'),
-    new Option('c', 'El perceptrón'),
-    new Option('d', 'La red neuronal'),
-  ], ['b']),
-  new Question('q_04', '¿Cuál fue el primer programa de ajedrez?', [
-    new Option('a', 'Deep Blue'),
-    new Option('b', 'Turochamp'),
-    new Option('c', 'AlphaGo'),
-    new Option('d', 'Stockfish'),
-  ], ['b']),
-  new Question('q_05', '¿Qué es el invierno de la IA?', [
-    new Option('a', 'Una estación del año'),
-    new Option('b', 'Un período de reducción de fondos e interés en IA'),
-    new Option('c', 'Un algoritmo de enfriamiento'),
-    new Option('d', 'Una técnica de optimización'),
-  ], ['b']),
-]));
-
-pruebaRepository.save(new Prueba('03', '01', 'ch-03', [
-  new Question('q_01', '¿Quién acuñó el término Inteligencia Artificial?', [
-    new Option('a', 'Alan Turing'),
-    new Option('b', 'John McCarthy'),
-    new Option('c', 'Marvin Minsky'),
-    new Option('d', 'Claude Shannon'),
-  ], ['b']),
-  new Question('q_02', '¿En qué año fue la conferencia de Dartmouth?', [
-    new Option('a', '1950'),
-    new Option('b', '1956'),
-    new Option('c', '1960'),
-    new Option('d', '1965'),
-  ], ['b']),
-  new Question('q_03', '¿Qué propuso Alan Turing en 1950?', [
-    new Option('a', 'La máquina de Von Neumann'),
-    new Option('b', 'El test de Turing'),
-    new Option('c', 'El perceptrón'),
-    new Option('d', 'La red neuronal'),
-  ], ['b']),
-  new Question('q_04', '¿Cuál fue el primer programa de ajedrez?', [
-    new Option('a', 'Deep Blue'),
-    new Option('b', 'Turochamp'),
-    new Option('c', 'AlphaGo'),
-    new Option('d', 'Stockfish'),
-  ], ['b']),
-  new Question('q_05', '¿Qué es el invierno de la IA?', [
-    new Option('a', 'Una estación del año'),
-    new Option('b', 'Un período de reducción de fondos e interés en IA'),
-    new Option('c', 'Un algoritmo de enfriamiento'),
-    new Option('d', 'Una técnica de optimización'),
-  ], ['b']),
-]));
-
-pruebaRepository.save(new Prueba('04', '01', 'ch-04', [
-  new Question('q_01', '¿Quién acuñó el término Inteligencia Artificial?', [
-    new Option('a', 'Alan Turing'),
-    new Option('b', 'John McCarthy'),
-    new Option('c', 'Marvin Minsky'),
-    new Option('d', 'Claude Shannon'),
-  ], ['b']),
-  new Question('q_02', '¿En qué año fue la conferencia de Dartmouth?', [
-    new Option('a', '1950'),
-    new Option('b', '1956'),
-    new Option('c', '1960'),
-    new Option('d', '1965'),
-  ], ['b']),
-  new Question('q_03', '¿Qué propuso Alan Turing en 1950?', [
-    new Option('a', 'La máquina de Von Neumann'),
-    new Option('b', 'El test de Turing'),
-    new Option('c', 'El perceptrón'),
-    new Option('d', 'La red neuronal'),
-  ], ['b']),
-  new Question('q_04', '¿Cuál fue el primer programa de ajedrez?', [
-    new Option('a', 'Deep Blue'),
-    new Option('b', 'Turochamp'),
-    new Option('c', 'AlphaGo'),
-    new Option('d', 'Stockfish'),
-  ], ['b']),
-  new Question('q_05', '¿Qué es el invierno de la IA?', [
-    new Option('a', 'Una estación del año'),
-    new Option('b', 'Un período de reducción de fondos e interés en IA'),
-    new Option('c', 'Un algoritmo de enfriamiento'),
-    new Option('d', 'Una técnica de optimización'),
-  ], ['b']),
-]));
-
-
-//**************************************************************************************************************** */
 
 // Use Cases
 const registerUser = new RegisterUser(userRepository, walletRepository);
@@ -261,21 +86,3 @@ app.listen(port, () => {
 });
 
 export default app;
-
-/*
-
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email": "usuario@test.com", "password": "password123", "username": "Amanda10"}' \
-  -v
-
-  curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "ana@test.com", "password": "123456"}' \
-  -c cookies.txt \
-  -v
-
-  curl -X POST http://localhost:3000/api/auth/refresh \
-  -b cookies.txt \
-  -v
-*/
