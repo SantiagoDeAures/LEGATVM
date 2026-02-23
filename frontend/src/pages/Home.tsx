@@ -58,7 +58,7 @@ useEffect(() => {
       <div className='home-banner' >
 
         <video autoPlay muted loop className="background-video">
-          <source src='../src/assets/banner-LEGATVM.mp4' type='video/mp4' />
+          <source src='https://res.cloudinary.com/dzbllqpfj/video/upload/v1771881705/banner-LEGATVM_rzdurg.mp4' type='video/mp4' />
         </video>
 
         <button
