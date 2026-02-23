@@ -29,7 +29,7 @@ import { PurchaseVolume } from './application/use-cases/PurchaseVolume';
 import { PostgresVolumeStartRepository } from './infrastructure/persistence/postgres/PostgresVolumeStartRepository';
 import { CheckVolumeStarted } from './application/use-cases/CheckVolumeStarted';
 
-export const app = express();
+export const app: express.Application = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());

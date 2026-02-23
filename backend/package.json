@@ -7,7 +7,7 @@
   "scripts": {
     "test": "vitest",
     "dev": "tsx watch src/main.ts",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.json",
     "start": "node dist/main.js",
     "migrate": "tsx src/scripts/migrate.ts",
     "reset-db": "tsx src/scripts/reset-db.ts",
