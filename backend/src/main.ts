@@ -34,7 +34,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+const corsOrigin = process.env.FRONTEND_URL || 'https://legatvm.vercel.app';
 
 app.use(cors({
   origin: corsOrigin,
