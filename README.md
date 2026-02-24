@@ -172,11 +172,9 @@ Crear un archivo `.env` en `backend/` con las siguientes variables:
 
 ```env
 SECRET_KEY=your_jwt_secret_key
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=legatvm
-DB_USER=postgres
-DB_PASSWORD=your_password
+DATABASE_URL=your-db.com
+FRONTEND_URL=frontend.com
+PORT=3000
 ```
 
 Crear la base de datos en PostgreSQL:
@@ -367,8 +365,6 @@ Los tests utilizan **Vitest**, **React Testing Library** y **jsdom** para tests 
 | Variable | Descripción | Ejemplo |
 |---|---|---|
 | `SECRET_KEY` | Secreto para firmar JWT | `my_secret_key` |
-| `DB_HOST` | Host de PostgreSQL | `localhost` |
 | `DB_PORT` | Puerto de PostgreSQL | `5432` |
-| `DB_NAME` | Nombre de la base de datos | `legatvm` |
-| `DB_USER` | Usuario de la base de datos | `postgres` |
-| `DB_PASSWORD` | Contraseña de la base de datos | `your_password` |
+| `FRONTEND_URL` | Url del Frontend | `frontend.com` |
+| `DATABASE_URL` | Url de donde se despliega la db | `db.com` |
