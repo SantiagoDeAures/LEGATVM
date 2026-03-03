@@ -4,6 +4,9 @@ import './VolumeList.scss';
 import { useAuth } from '../../hooks/useAuth';
 import VolumeDetails from './VolumeDetails';
 import { useNavigate } from 'react-router';
+import upcomingVolume1 from '../../assets/ThePrince.png'
+import upcomingVolume2 from '../../assets/TheRepublic.png'
+import { DesigningModal } from './DesigningModal';
 
 interface VolumeListProps {
   volumes: Volume[],
@@ -21,14 +24,16 @@ const CATEGORY_LIST = [
 ];
 
 export default function VolumeList({
-   volumes, 
-   showFilters, 
-   handleCategoryList
-  }: VolumeListProps) {
+  volumes,
+  showFilters,
+  handleCategoryList
+}: VolumeListProps) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['Todos']);
   const [search, setSearch] = useState('');
   const [selectedVolumeId, setSelectedVolumeId] = useState<string | null>(null);
   const { isAuthenticated } = useAuth()
+  const [designingModal, setDesigningModal] = useState(false)
+
   const navigate = useNavigate()
 
   const redirectToLogin = () => {
@@ -85,17 +90,38 @@ export default function VolumeList({
                 </label>
               ))}
             </div>
+
           )}
+
         </div>
 
         <div className="volume-cards">
-          {filtered.map((volume) => (
-            <div key={volume.id} className="volume-card" onClick={isAuthenticated ? () => setSelectedVolumeId(volume.id) : redirectToLogin}>
-              <img src={volume.thumbnail} alt={volume.title} />
-              <div>{volume.title}</div>
+          <section>
+            {filtered.map((volume) => (
+              <div key={volume.id} className="volume-card" onClick={isAuthenticated ? () => setSelectedVolumeId(volume.id) : redirectToLogin}>
+                <img src={volume.thumbnail} alt={volume.title} />
+                <div>{volume.title}</div>
+              </div>
+            ))}
+          </section>
+          <section className='upcoming-section'>
+            <h2 className='upcoming-title'>Muy Pronto</h2>
+            <div className='upcoming-container'>
+              <div className="volume-card" onClick={isAuthenticated ? () => setDesigningModal(true) : redirectToLogin}>
+              <img src={upcomingVolume1} alt='El Principe' />
+              <div>El Principe - Maquiavelo</div>
             </div>
-          ))}
+            <div className="volume-card" onClick={isAuthenticated ? () => setDesigningModal(true) : redirectToLogin}>
+              <img src={upcomingVolume2} alt='El Principe' />
+              <div>La Republica - Platon</div>
+            </div>
+            </div>
+            
+          </section>
+
         </div>
+
+
       </div>
 
       {selectedVolumeId && (
@@ -103,6 +129,10 @@ export default function VolumeList({
           volumeId={selectedVolumeId}
           onClose={() => setSelectedVolumeId(null)}
         />
+      )}
+
+      {designingModal && (
+        <DesigningModal onClose={() => setDesigningModal(false)} />
       )}
     </div>
   );

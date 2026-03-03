@@ -66,12 +66,29 @@
 
 .volume-cards {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100vh;
   overflow-x: hidden;
   cursor: pointer;
+}
+
+.upcoming-section{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.upcoming-container{
+  display: flex;
+}
+
+.upcoming-title{
+  font-family: v.$font-primary;
+  color: v.$color-primary;
 }
 
 .volume-card {
