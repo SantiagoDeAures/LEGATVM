@@ -1,6 +1,6 @@
 # LEGATVM
 
-LEGATVM es una plataforma educativa full-stack donde los usuarios pueden explorar, comprar y avanzar a través de volúmenes de aprendizaje. Cada volumen contiene capítulos con diferentes tipos de contenido (video, texto, interactivo) y pruebas que los usuarios deben aprobar para avanzar. La plataforma incluye un sistema de monedero virtual para la compra de contenido.
+LEGATVM se trata de una plataforma educativa full-stack donde los usuarios pueden explorar, comprar y avanzar a través de volúmenes de aprendizaje. Cada volumen contiene capítulos con diferentes tipos de contenido (video, texto, interactivo) y pruebas que los usuarios deben aprobar para avanzar. El proposito principal es hacer del aprendizaje un proceso entretenido y edificante.
 
 ## Stack Tecnológico
 
