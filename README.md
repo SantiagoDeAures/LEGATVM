@@ -2,6 +2,14 @@
 
 LEGATVM se trata de una plataforma educativa full-stack donde los usuarios pueden explorar, comprar y avanzar a través de volúmenes de aprendizaje. Cada volumen contiene capítulos con diferentes tipos de contenido (video, texto, interactivo) y pruebas que los usuarios deben aprobar para avanzar. El proposito principal es hacer del aprendizaje un proceso entretenido y edificante.
 
+## Url de la presentación:
+
+https://www.canva.com/design/DAHCLQ-8Rgc/mm3y20w3W1tLbVdqoVal9w/edit?utm_content=DAHCLQ-8Rgc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+## Url de despliegue:
+
+https://legatvm.vercel.app/
+
 ## Stack Tecnológico
 
 ### Backend
